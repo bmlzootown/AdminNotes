@@ -17,13 +17,7 @@ public class Plugin extends JavaPlugin {
 	public void onLoad() {
 		description = getDescription();
 
-		File dataFolder = getDataFolder();
-		configFile = new File(dataFolder, "config.yml");
 
-		if (!configFile.exists()) {
-			Logger.info("Config file not found. Writing defaults.");
-			saveDefaultConfig();
-		}
 	}
 
 	public static Database database;
@@ -32,11 +26,18 @@ public class Plugin extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		
+		File dataFolder = getDataFolder();
+		configFile = new File(dataFolder, "config.yml");
+		if (!configFile.exists()) {
+			Logger.info("Config file not found. Writing defaults.");
+			saveDefaultConfig();
+		}
+		
 
-		if (Config.getString("properties.db-type") == "mysql"){
+		if (Config.getString("properties.db-type").equalsIgnoreCase("mysql")){
 			database = new MySQL();
 		}else{
-			Logger.severe("No database selected, unloading plugin...");
+			Logger.severe("No database selected ("+Config.getString("properties.db-type")+"), unloading plugin...");
 			instance.getPluginLoader().disablePlugin(instance);
 			return;
 		}
