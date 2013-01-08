@@ -1,18 +1,13 @@
 properties:
-  # the line separator used in messages
-  line-separator: '<newline>'
-  
-  # prefix used in chat, can have color codes
-  chat-prefix: '&a[Notes] - '
-  
-  # DB type to use: mysql
-  db-type: 'mysql'
-  
-# MySQL login info.
+  line-separator: <newline>
+  chat-prefix: '&7[&aNotes&7] '
+  db-type: mysql
+  permission-default: false
+  notify-by-default: false
 mysql:
   hostname: localhost
   username: root
-  password: ''
+  password: 
   port: 3306
   database: minecraft
-  prefix: "AN_"
+  prefix: AN_

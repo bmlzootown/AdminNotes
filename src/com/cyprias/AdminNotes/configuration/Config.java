@@ -5,6 +5,7 @@ import com.cyprias.AdminNotes.Plugin;
 public class Config {
 	private static final Plugin plugin = Plugin.getInstance();
 
+
 	public static long getLong(String property) {
 		return plugin.getConfig().getLong(property);
 	}
@@ -24,4 +25,5 @@ public class Config {
 	public static String getString(String property) {
 		return plugin.getConfig().getString(property);
 	}
+
 }

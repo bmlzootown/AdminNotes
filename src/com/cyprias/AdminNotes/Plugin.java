@@ -1,11 +1,15 @@
 package com.cyprias.AdminNotes;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.cyprias.AdminNotes.command.CommandManager;
+import com.cyprias.AdminNotes.command.CreateCommand;
 import com.cyprias.AdminNotes.configuration.Config;
 import com.cyprias.AdminNotes.database.Database;
 import com.cyprias.AdminNotes.database.MySQL;
@@ -21,18 +25,14 @@ public class Plugin extends JavaPlugin {
 	}
 
 	public static Database database;
-	
 
 	public void onEnable() {
 		instance = this;
 		
 		File dataFolder = getDataFolder();
 		configFile = new File(dataFolder, "config.yml");
-		if (!configFile.exists()) {
-			Logger.info("Config file not found. Writing defaults.");
-			saveDefaultConfig();
-		}
-		
+		getConfig().options().copyDefaults(true);
+		saveConfig();
 
 		if (Config.getString("properties.db-type").equalsIgnoreCase("mysql")){
 			database = new MySQL();
@@ -48,10 +48,16 @@ public class Plugin extends JavaPlugin {
 			return;
 		}
 		
+		CommandManager cm = new CommandManager()
+			.registerCommand("create", new CreateCommand());
+		
+		this.getCommand("notes").setExecutor(cm);
+		
+		Logger.info("enabled.");
 	}
 
 	public void onDisable() {
-		getServer().getScheduler().cancelTasks(this);
+		Logger.info("disabled.");
 		instance = null;
 	}
 
@@ -79,4 +85,18 @@ public class Plugin extends JavaPlugin {
 		return instance;
 	}
 
+	public static double getUnixTime() {
+		return (System.currentTimeMillis() / 1000D);
+	}
+	
+	public static String getFinalArg(final String[] args, final int start) {
+		final StringBuilder bldr = new StringBuilder();
+		for (int i = start; i < args.length; i++) {
+			if (i != start) {
+				bldr.append(" ");
+			}
+			bldr.append(args[i]);
+		}
+		return bldr.toString();
+	}
 }

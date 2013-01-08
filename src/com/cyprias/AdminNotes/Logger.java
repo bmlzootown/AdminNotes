@@ -12,6 +12,14 @@ public class Logger {
 		logger.info(getLogPrefix() + String.format(format, args));
 	}
 
+	public static void info(Object... args) {
+		String msg = "%s";
+		for (int i=1; i<args.length; i++){
+			msg += ", %s";
+		}
+		info(msg, args);
+	}
+	
 	public static void infoRaw(String mess) {
 		logger.info(mess);
 	}

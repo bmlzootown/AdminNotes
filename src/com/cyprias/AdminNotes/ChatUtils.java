@@ -31,6 +31,19 @@ public class ChatUtils {
 		broadcastRaw(String.format(format, args));
 	}
 
+	public static void broadcast(Perm permission, String message) {
+		message = replaceColorCodes(message);
+		String[] messages = message.split(Config.getString("properties.line-separator"));
+		String prefix = getChatPrefix();
+		for (int cntr = 0; cntr < messages.length; cntr++)
+			messages[cntr] = prefix + messages[cntr];
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (Plugin.hasPermission(player, permission))
+				player.sendMessage(messages);
+		}
+		Bukkit.getConsoleSender().sendMessage(messages);
+	}
+	
 	public static void broadcastRaw(String message) {
 		message = replaceColorCodes(message);
 		String[] messages = message.split(Config.getString("properties.line-separator"));

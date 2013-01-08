@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import org.bukkit.command.CommandSender;
 
 import com.cyprias.AdminNotes.Logger;
+import com.cyprias.AdminNotes.Plugin;
 import com.cyprias.AdminNotes.configuration.Config;
 
 public class MySQL implements Database {
@@ -19,12 +20,15 @@ public class MySQL implements Database {
 	}
 
 	static String prefix;
+	static String notes_table;
 	public Boolean init() {
 		if (!canConnect()){
 			Logger.info("Failed to connect to MySQL!");
 			return false;
 		}
 		prefix = Config.getString("mysql.prefix");
+		notes_table = prefix+ "Notes";
+		
 		
 		try {
 			createTables();
@@ -39,9 +43,9 @@ public class MySQL implements Database {
 	public void createTables() throws SQLException{
 		Connection con = getConnection();
 		
-		if (tableExists(prefix+ "Notes") == false) {
+		if (tableExists(notes_table) == false) {
 			Logger.info("Creating Notes table.");
-			con.prepareStatement("CREATE TABLE " + prefix+ "Notes (`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, `time` BIGINT NOT NULL, `notify` BOOLEAN NOT NULL DEFAULT '0', `writer` VARCHAR(32) NOT NULL, `player` VARCHAR(32) NOT NULL, `note` TEXT NOT NULL) ENGINE = InnoDB").executeUpdate();
+			con.prepareStatement("CREATE TABLE " + notes_table+ " (`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, `time` BIGINT NOT NULL, `notify` BOOLEAN NOT NULL DEFAULT '0', `writer` VARCHAR(32) NOT NULL, `player` VARCHAR(32) NOT NULL, `note` TEXT NOT NULL) ENGINE = InnoDB").executeUpdate();
 		}
 		
 	}
@@ -49,8 +53,7 @@ public class MySQL implements Database {
 	public static boolean tableExists(String tableName) throws SQLException {
 		boolean exists = false;
 		Connection con = getConnection();
-		PreparedStatement statement = con.prepareStatement("show tables like '" + tableName + "'");
-		ResultSet result = statement.executeQuery();
+		ResultSet result = con.prepareStatement("show tables like '" + tableName + "'").executeQuery();
 		result.last();
 		if (result.getRow() != 0) 
 			exists = true;
@@ -69,11 +72,31 @@ public class MySQL implements Database {
 	
 	private Boolean canConnect(){
 		try {
+			@SuppressWarnings("unused")
 			Connection con = getConnection();
 		} catch (SQLException e) {
 			return false;
 		}
 		return true;
 	}
+
+	@Override
+	public void create(CommandSender sender, Boolean notify, String player, String text) throws SQLException {
+		String query = "INSERT INTO `"+notes_table+"` (`time` ,`notify` ,`writer` ,`player` ,`note`) VALUES (?, ?, ?, ?, ?);";
+		Connection con = getConnection();
+		PreparedStatement statement;
+
+		statement = con.prepareStatement(query);
+		statement.setInt(1, (int) Plugin.getUnixTime());
+		statement.setBoolean(2, notify);
+		statement.setString(3, sender.getName());
+		statement.setString(4, player);
+		statement.setString(5, text);
+		
+		statement.executeUpdate();
+		con.close();
+	}
+	
+	
 	
 }
