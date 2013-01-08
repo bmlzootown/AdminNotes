@@ -1,0 +1,8 @@
+name: AdminNotes
+main: com.cyprias.AdminNotes.Plugin
+author: Cyprias
+description: 'An Admin notes plugin.
+version: 0.0.1
+commands:
+  notes:
+    description: get available commands
