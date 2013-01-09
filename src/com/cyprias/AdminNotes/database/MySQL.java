@@ -85,6 +85,23 @@ public class MySQL implements Database {
 		return notes;
 	}
 	
+
+	@Override
+	public List<Note> getPlayerNotifications(String playerName) throws SQLException {
+		List<Note> notes = new ArrayList<Note>();
+		queryReturn results = executeQuery("SELECT * FROM `"+notes_table+"` WHERE `notify` =1 AND `player` LIKE ?", playerName);
+		ResultSet r = results.result;
+
+		while (r.next()) {
+		//	Logger.info("id: " + r.getInt(1));
+			notes.add(new Note(r.getInt(1), r.getInt(2), r.getBoolean(3), r.getString(4), r.getString(5), r.getString(6)));
+			
+		}
+		
+		return notes;
+	}
+	
+	
 	public void createTables() throws SQLException{
 		Connection con = getConnection();
 		
@@ -204,6 +221,6 @@ public class MySQL implements Database {
 		
 		return note;
 	}
-	
+
 	
 }

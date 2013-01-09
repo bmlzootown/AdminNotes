@@ -50,11 +50,16 @@ public class InfoCommand implements Command {
 				SimpleDateFormat f = new SimpleDateFormat("MM/dd/yy h:mm a");
 				String date = f.format((long) note.getTime() * 1000); 
 				
+				ChatColor G = ChatColor.GRAY;
+				ChatColor W = ChatColor.WHITE;
 				
 				
 				
-				ChatUtils.send(sender, String.format((ChatColor.GRAY+"["+ChatColor.WHITE+"%s"+ChatColor.GRAY+"] "+ChatColor.WHITE+"%s"+ChatColor.GRAY+": "+ChatColor.WHITE+"%s"), note.getId(), note.getPlayer(), note.getText()));
-				ChatUtils.send(sender, "Writer: " + note.getWriter() + ", Date: " + date.toString() + ", Notify: " + note.getNotify());
+				
+				
+				
+				ChatUtils.send(sender, String.format((G+"[%s] %s: %s"), W+String.valueOf(note.getId())+G, W+note.getPlayer()+G, W+note.getText()+G));
+				ChatUtils.send(sender, String.format(G+"Writer %s @ %s, Notify: %s", W+note.getWriter()+G, W+date.toString()+G, W+String.valueOf(note.getNotify())+G));
 
 				
 				

@@ -19,4 +19,6 @@ public interface Database {
 	
 	Note info(int id) throws SQLException;
 	
+	List<Note> getPlayerNotifications(String playerName) throws SQLException;
+	
 }
