@@ -23,7 +23,6 @@ public class ListCommand implements Command {
 		if (!Plugin.hasPermission(sender, Perm.LIST)) 
 			return false;
 		
-
 		int page = -1; //Default to last page.
 		if (args.length > 0) {// && args[1].equalsIgnoreCase("compact"))
 			if (Plugin.isInt(args[0])) {

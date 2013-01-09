@@ -2,9 +2,7 @@ package com.cyprias.AdminNotes.command;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -16,9 +14,7 @@ import com.cyprias.AdminNotes.Perm;
 import com.cyprias.AdminNotes.Plugin;
 import com.cyprias.AdminNotes.configuration.Config;
 
-public class InfoCommand implements Command {
-
-
+public class RemoveCommand implements Command {
 
 	@Override
 	public boolean execute(CommandSender sender, org.bukkit.command.Command cmd, String[] args) {
@@ -40,17 +36,14 @@ public class InfoCommand implements Command {
 			}
 		}
 		
-		
 		try {
 			Note note = Plugin.database.info(id);
 			
 			if (note != null){
 				SimpleDateFormat f = new SimpleDateFormat(Config.getString("properties.date-format"));
 				String date = f.format((long) note.getTime() * 1000); 
-				ChatColor G = ChatColor.GRAY;
-				ChatColor W = ChatColor.WHITE;
-				ChatUtils.send(sender, String.format((G+"[%s] %s: %s"), W+String.valueOf(note.getId())+G, W+note.getPlayer()+G, W+note.getText()+G));
-				ChatUtils.send(sender, String.format(G+"Writer %s @ %s, Notify: %s", W+note.getWriter()+G, W+date.toString()+G, W+String.valueOf(note.getNotify())+G));
+				Logger.info("Removing #"+id+" by " + note.getWriter() + " on "+date+": " + note.getText());
+				note.remove();
 			}else{
 				ChatUtils.error(sender, "Could not find info on id #" + id);
 				return true;
@@ -61,12 +54,17 @@ public class InfoCommand implements Command {
 			ChatUtils.error(sender, e.getLocalizedMessage());
 			return true;
 		}
-
+		
+		
 		return false;
 	}
+	
+	
+	
+	
 	public void listCommands(CommandSender sender, List<String> list) {
-		if (Plugin.hasPermission(sender, Perm.INFO))
-			list.add("/%s info - Show info on a note.");
+		if (Plugin.hasPermission(sender, Perm.REMOVE))
+			list.add("/%s remove - Remove a note.");
 	}
 	@Override
 	public CommandAccess getAccess() {
@@ -74,15 +72,12 @@ public class InfoCommand implements Command {
 	}
 
 	public void getCommands(CommandSender sender, org.bukkit.command.Command cmd) {
-		ChatUtils.sendCommandHelp(sender, Perm.INFO, "/%s info <id> - Show info on a note.", cmd);
+		ChatUtils.sendCommandHelp(sender, Perm.INFO, "/%s remove <id> - Remove a note.", cmd);
 	}
 
-	@Override
 	public boolean hasValues() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	
-	
 }

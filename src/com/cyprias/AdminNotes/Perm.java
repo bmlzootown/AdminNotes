@@ -14,8 +14,10 @@ public enum Perm {
 	INFO("adminnotes.info", "You do not have permissiont to see note info."), 
 	LOGIN_NOTIFIED("adminnotes.login-notified"), 
 	NOTIFY("adminnotes.notify", "You do not have permissiont to toggle notify."),
-	PARENT_MOD("lottery.mod", LIST, CREATE_NOTIFIED, INFO, LOGIN_NOTIFIED),
-	PARENT_ADMIN("lottery.admin", PARENT_MOD, CREATE);
+	SEARCH("adminnotes.search", "You do not have permission to search notes."),
+	REMOVE("adminnotes.remove", "You do not have permission remove notes."),
+	PARENT_MOD("lottery.mod", LIST, CREATE_NOTIFIED, INFO, LOGIN_NOTIFIED, SEARCH),
+	PARENT_ADMIN("lottery.admin", PARENT_MOD, CREATE, REMOVE);
 
 	private Perm(String value, Perm... childrenArray) {
 		this(value, String.format(DEFAULT_ERROR_MESSAGE, value), childrenArray);

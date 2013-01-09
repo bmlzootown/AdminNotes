@@ -14,6 +14,7 @@ import com.cyprias.AdminNotes.ChatUtils;
 import com.cyprias.AdminNotes.Logger;
 import com.cyprias.AdminNotes.Note;
 import com.cyprias.AdminNotes.Plugin;
+import com.cyprias.AdminNotes.SearchParser;
 import com.cyprias.AdminNotes.configuration.Config;
 
 public class MySQL implements Database {
@@ -46,17 +47,17 @@ public class MySQL implements Database {
 		
 		int rows = getResultCount("SELECT COUNT(*) FROM " + notes_table);
 
-		Logger.info("rows: " + rows);
+		//Logger.info("rows: " + rows);
 		
 		int perPage = Config.getInt("properties.notes-per-page");
 		
-		Logger.info("page1: " + page);
+		//Logger.info("page1: " + page);
 		int max = (rows / perPage);// + 1;
 		
 		if (rows % perPage == 0)
 			max--;
 		
-		Logger.info("max: " + max);
+		//Logger.info("max: " + max);
 		if (page < 0){
 			page = max - (Math.abs(page) - 1);
 		}else{
@@ -64,7 +65,7 @@ public class MySQL implements Database {
 				page = max;
 			
 		}
-		Logger.info("page2: " + page);
+		//Logger.info("page2: " + page);
 		
 		ChatUtils.send(sender, "Page: " + (page+1) + "/" + (max+1));
 		List<Note> notes = new ArrayList<Note>();
@@ -224,7 +225,58 @@ public class MySQL implements Database {
 
 	@Override
 	public Boolean notify(int id) throws SQLException {
-		int succsess = executeUpdate("UPDATE `minecraft`.`AN_Notes` SET `notify` = !`notify` WHERE `AN_Notes`.`id` = ?;", id);
+		int succsess = executeUpdate("UPDATE `"+notes_table+"` SET `notify` = !`notify` WHERE `AN_Notes`.`id` = ?;", id);
+		return (succsess > 0) ? true : false;
+	}
+
+	@Override
+	public List<Note> search(SearchParser parser) throws SQLException {
+		List<Note> notes = new ArrayList<Note>();
+		
+		queryReturn results;
+		ResultSet r;
+		
+		for (int i=0; i< parser.players.size(); i++){
+			results = executeQuery("SELECT * FROM `"+notes_table+"` WHERE `player` LIKE ?", parser.players.get(i));
+			r = results.result;
+			while (r.next()) {
+			//	Logger.info("id: " + r.getInt(1));
+				notes.add(new Note(r.getInt(1), r.getInt(2), r.getBoolean(3), r.getString(4), r.getString(5), r.getString(6)));
+				
+			}
+		}
+		
+		for (int i=0; i< parser.writers.size(); i++){
+			results = executeQuery("SELECT * FROM `"+notes_table+"` WHERE `writer` LIKE ?", parser.writers.get(i));
+			r = results.result;
+			while (r.next()) {
+			//	Logger.info("id: " + r.getInt(1));
+				notes.add(new Note(r.getInt(1), r.getInt(2), r.getBoolean(3), r.getString(4), r.getString(5), r.getString(6)));
+				
+			}
+		}
+		
+		for (int i=0; i< parser.keywords.size(); i++){
+			results = executeQuery("SELECT * FROM `"+notes_table+"` WHERE `text` LIKE ?", "%"+parser.keywords.get(i)+"%");
+			r = results.result;
+			while (r.next()) {
+			//	Logger.info("id: " + r.getInt(1));
+				notes.add(new Note(r.getInt(1), r.getInt(2), r.getBoolean(3), r.getString(4), r.getString(5), r.getString(6)));
+				
+			}
+		}
+		
+		
+		
+		
+		
+		
+		return notes;
+	}
+
+	@Override
+	public Boolean remove(int id) throws SQLException {
+		int succsess = executeUpdate("DELETE FROM `"+notes_table+"` WHERE `id` = ?", id);
 		return (succsess > 0) ? true : false;
 	}
 

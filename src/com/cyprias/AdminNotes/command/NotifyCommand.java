@@ -20,6 +20,10 @@ public class NotifyCommand implements Command {
 		if (!Plugin.hasPermission(sender, Perm.NOTIFY)) {
 			return false;
 		}
+		if (args.length == 0){
+			getCommands(sender, cmd);
+			return true;
+		}
 		
 		int id = 0; //Default to last page.
 		if (args.length > 0) {// && args[1].equalsIgnoreCase("compact"))
@@ -63,6 +67,6 @@ public class NotifyCommand implements Command {
 	}
 
 	public boolean hasValues() {
-		return true;
+		return false;
 	}
 }

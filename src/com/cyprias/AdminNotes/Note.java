@@ -1,5 +1,7 @@
 package com.cyprias.AdminNotes;
 
+import java.sql.SQLException;
+
 public class Note {
 
 	public Note(int int1, int int2, boolean boolean1, String string, String string2, String string3) {
@@ -36,6 +38,10 @@ public class Note {
 	
 	public String getText(){
 		return this.text;
+	}
+	
+	public Boolean remove() throws SQLException{
+		return Plugin.database.remove(id);
 	}
 	
 }

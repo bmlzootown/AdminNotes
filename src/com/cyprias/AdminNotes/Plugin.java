@@ -1,12 +1,10 @@
 package com.cyprias.AdminNotes;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.Arrays;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,6 +13,8 @@ import com.cyprias.AdminNotes.command.CreateCommand;
 import com.cyprias.AdminNotes.command.InfoCommand;
 import com.cyprias.AdminNotes.command.ListCommand;
 import com.cyprias.AdminNotes.command.NotifyCommand;
+import com.cyprias.AdminNotes.command.RemoveCommand;
+import com.cyprias.AdminNotes.command.SearchCommand;
 import com.cyprias.AdminNotes.configuration.Config;
 import com.cyprias.AdminNotes.database.Database;
 import com.cyprias.AdminNotes.database.MySQL;
@@ -23,7 +23,6 @@ import com.cyprias.AdminNotes.listeners.PlayerListener;
 public class Plugin extends JavaPlugin {
 	// static PluginDescriptionFile description;
 	private static Plugin instance = null;
-	private File configFile;
 
 	public void onLoad() {
 		// description = getDescription();
@@ -34,8 +33,8 @@ public class Plugin extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 
-		File dataFolder = getDataFolder();
-		configFile = new File(dataFolder, "config.yml");
+		//File dataFolder = getDataFolder();
+		//configFile = new File(dataFolder, "config.yml");
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 
@@ -55,8 +54,13 @@ public class Plugin extends JavaPlugin {
 
 		registerListeners(new PlayerListener());
 
-		CommandManager cm = new CommandManager().registerCommand("create", new CreateCommand()).registerCommand("info", new InfoCommand())
-			.registerCommand("list", new ListCommand()).registerCommand("notify", new NotifyCommand());
+		CommandManager cm = new CommandManager()
+			.registerCommand("create", new CreateCommand())
+			.registerCommand("info", new InfoCommand())
+			.registerCommand("list", new ListCommand())
+			.registerCommand("notify", new NotifyCommand())
+			.registerCommand("search", new SearchCommand())
+			.registerCommand("remove", new RemoveCommand());
 
 		this.getCommand("notes").setExecutor(cm);
 
@@ -131,5 +135,24 @@ public class Plugin extends JavaPlugin {
 			return false;
 		}
 		return true;
+	}
+
+	public static <T> T[] concat(T[] first, T[]... rest) {
+
+		// Read rest
+		int totalLength = first.length;
+		for (T[] array : rest) {
+			totalLength += array.length;
+		}
+
+		// Concat with arraycopy
+		T[] result = Arrays.copyOf(first, totalLength);
+		int offset = first.length;
+		for (T[] array : rest) {
+			System.arraycopy(array, 0, result, offset, array.length);
+			offset += array.length;
+		}
+		return result;
+
 	}
 }

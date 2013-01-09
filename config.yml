@@ -5,6 +5,7 @@ properties:
   permission-default: false
   notify-by-default: false
   notes-per-page: 5
+  date-format: "MM/dd/yy h:mm a"
 mysql:
   hostname: localhost
   username: root

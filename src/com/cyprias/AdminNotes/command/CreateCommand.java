@@ -23,6 +23,10 @@ public class CreateCommand implements Command {
 		if (!Plugin.hasPermission(sender, Perm.CREATE)) {
 			return false;
 		}
+		if (args.length == 0){
+			getCommands(sender, cmd);
+			return true;
+		}
 		
 		if (args.length < 2){
 			ChatUtils.sendCommandHelp(sender, Perm.CREATE, "/%s create <player> <note>", cmd);
@@ -59,7 +63,7 @@ public class CreateCommand implements Command {
 	}
 
 	public boolean hasValues() {
-		return true;
+		return false;
 	}
 
 }
