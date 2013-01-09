@@ -1,31 +1,25 @@
 package com.cyprias.AdminNotes.command;
 
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-
 import com.cyprias.AdminNotes.ChatUtils;
-import com.cyprias.AdminNotes.Logger;
 import com.cyprias.AdminNotes.Note;
 import com.cyprias.AdminNotes.Perm;
 import com.cyprias.AdminNotes.Plugin;
 
-public class InfoCommand implements Command {
-
+public class NotifyCommand implements Command {
 	public void listCommands(CommandSender sender, List<String> list) {
-		if (Plugin.hasPermission(sender, Perm.INFO))
-			list.add("/%s info - Show info on a note.");
+		if (Plugin.hasPermission(sender, Perm.NOTIFY))
+			list.add("/%s notify - Toggle notify on login flag");
 	}
 
-	@Override
 	public boolean execute(CommandSender sender, org.bukkit.command.Command cmd, String[] args) {
-		if (!Plugin.hasPermission(sender, Perm.INFO)) 
+		if (!Plugin.hasPermission(sender, Perm.NOTIFY)) {
 			return false;
+		}
 		
 		int id = 0; //Default to last page.
 		if (args.length > 0) {// && args[1].equalsIgnoreCase("compact"))
@@ -39,44 +33,36 @@ public class InfoCommand implements Command {
 		
 		
 		try {
-			Note note = Plugin.database.info(id);
-			
-			if (note != null){
-				SimpleDateFormat f = new SimpleDateFormat("MM/dd/yy h:mm a");
-				String date = f.format((long) note.getTime() * 1000); 
+			Boolean success = Plugin.database.notify(id);
+			if (success){
+				Note note = Plugin.database.info(id);
+
 				ChatColor G = ChatColor.GRAY;
 				ChatColor W = ChatColor.WHITE;
-				ChatUtils.send(sender, String.format((G+"[%s] %s: %s"), W+String.valueOf(note.getId())+G, W+note.getPlayer()+G, W+note.getText()+G));
-				ChatUtils.send(sender, String.format(G+"Writer %s @ %s, Notify: %s", W+note.getWriter()+G, W+date.toString()+G, W+String.valueOf(note.getNotify())+G));
+				ChatUtils.send(sender, G+"Notify on #" + W+id + G+ " set to " + W+String.valueOf(note.getNotify()));
+				
 			}else{
-				ChatUtils.error(sender, "Could not find info on id #" + id);
-				return true;
+			//	ChatUtils.send(sender, "Failed to toggle notify on #" +  args[0]);
+				ChatUtils.error(sender, "Failed to toggle notify on #" +  args[0]);
+				
 			}
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			ChatUtils.error(sender, e.getLocalizedMessage());
-			return true;
+			ChatUtils.error(sender,  e.getLocalizedMessage());
 		}
 
-		return false;
+		return true;
 	}
 
-	@Override
 	public CommandAccess getAccess() {
 		return CommandAccess.BOTH;
 	}
 
 	public void getCommands(CommandSender sender, org.bukkit.command.Command cmd) {
-		ChatUtils.sendCommandHelp(sender, Perm.INFO, "/%s info <id> - Show info on a note.", cmd);
+		ChatUtils.sendCommandHelp(sender, Perm.NOTIFY, "/%s notify <id>", cmd);
 	}
 
-	@Override
 	public boolean hasValues() {
-		// TODO Auto-generated method stub
 		return true;
 	}
-
-	
-	
 }

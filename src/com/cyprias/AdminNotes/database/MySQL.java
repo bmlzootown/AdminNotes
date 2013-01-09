@@ -222,5 +222,11 @@ public class MySQL implements Database {
 		return note;
 	}
 
+	@Override
+	public Boolean notify(int id) throws SQLException {
+		int succsess = executeUpdate("UPDATE `minecraft`.`AN_Notes` SET `notify` = !`notify` WHERE `AN_Notes`.`id` = ?;", id);
+		return (succsess > 0) ? true : false;
+	}
+
 	
 }

@@ -21,4 +21,6 @@ public interface Database {
 	
 	List<Note> getPlayerNotifications(String playerName) throws SQLException;
 	
+	Boolean notify(int id) throws SQLException;
+	
 }

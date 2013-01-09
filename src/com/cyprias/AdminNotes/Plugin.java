@@ -14,6 +14,7 @@ import com.cyprias.AdminNotes.command.CommandManager;
 import com.cyprias.AdminNotes.command.CreateCommand;
 import com.cyprias.AdminNotes.command.InfoCommand;
 import com.cyprias.AdminNotes.command.ListCommand;
+import com.cyprias.AdminNotes.command.NotifyCommand;
 import com.cyprias.AdminNotes.configuration.Config;
 import com.cyprias.AdminNotes.database.Database;
 import com.cyprias.AdminNotes.database.MySQL;
@@ -55,7 +56,7 @@ public class Plugin extends JavaPlugin {
 		registerListeners(new PlayerListener());
 
 		CommandManager cm = new CommandManager().registerCommand("create", new CreateCommand()).registerCommand("info", new InfoCommand())
-			.registerCommand("list", new ListCommand());
+			.registerCommand("list", new ListCommand()).registerCommand("notify", new NotifyCommand());
 
 		this.getCommand("notes").setExecutor(cm);
 

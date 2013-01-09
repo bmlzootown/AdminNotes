@@ -31,7 +31,7 @@ public class ListCommand implements Command {
 				if (page>0)
 					page-=1;
 			} else {
-				ChatUtils.send(sender, "Invalid page: " +  args[0]);
+				ChatUtils.error(sender, "Invalid page: " +  args[0]);
 				return true;
 			}
 		}
@@ -50,7 +50,7 @@ public class ListCommand implements Command {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			ChatUtils.send(sender, "Error: " + e.getLocalizedMessage());
+			ChatUtils.error(sender, e.getLocalizedMessage());
 			return true;
 		}
 		

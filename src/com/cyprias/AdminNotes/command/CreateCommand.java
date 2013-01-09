@@ -37,7 +37,7 @@ public class CreateCommand implements Command {
 			Plugin.database.create(sender, Config.getBoolean("properties.notify-by-default"), player, text);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			ChatUtils.send(sender, "An error has occured: " + e.getLocalizedMessage());
+			ChatUtils.error(sender, "An error has occured: " + e.getLocalizedMessage());
 			
 			return true;
 		}
