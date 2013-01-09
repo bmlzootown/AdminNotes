@@ -39,7 +39,7 @@ public class CreateCommand implements Command {
 			e.printStackTrace();
 			ChatUtils.send(sender, "An error has occured: " + e.getLocalizedMessage());
 			
-			return false;
+			return true;
 		}
 		
 		ChatUtils.send(sender, "Created note.");

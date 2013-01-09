@@ -4,6 +4,7 @@ properties:
   db-type: mysql
   permission-default: false
   notify-by-default: false
+  notes-per-page: 5
 mysql:
   hostname: localhost
   username: root

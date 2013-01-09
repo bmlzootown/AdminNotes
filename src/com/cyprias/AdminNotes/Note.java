@@ -1,0 +1,41 @@
+package com.cyprias.AdminNotes;
+
+public class Note {
+
+	public Note(int int1, int int2, boolean boolean1, String string, String string2, String string3) {
+		this.id = int1;
+		this.time = int2;
+		this.notify = boolean1;
+		this.writer = string;
+		this.player = string2;
+		this.text = string3;
+	}
+	private int id, time;
+	private Boolean notify;
+	private String writer, player, text;
+	
+	public int getId(){
+		return this.id;
+	}
+
+	public int getTime(){
+		return this.time;
+	}
+	
+	public Boolean getNotify(){
+		return this.notify;
+	}
+
+	public String getWriter(){
+		return this.writer;
+	}
+	
+	public String getPlayer(){
+		return this.player;
+	}
+	
+	public String getText(){
+		return this.text;
+	}
+	
+}

@@ -13,6 +13,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import com.cyprias.AdminNotes.ChatUtils;
+import com.cyprias.AdminNotes.Logger;
 import com.cyprias.AdminNotes.Plugin;
 
 public class CommandManager implements CommandExecutor, Listable {
@@ -45,6 +46,7 @@ public class CommandManager implements CommandExecutor, Listable {
 		if (help) {
 			return true;
 		}
+		
 		Command command = commands.get(args[0].toLowerCase());
 		if (command != null) {
 			CommandAccess access = command.getAccess();
@@ -65,16 +67,16 @@ public class CommandManager implements CommandExecutor, Listable {
 							return true;
 						}
 						try {
-							int page = Integer.parseInt(args[0]);
-							this.getCommands(sender, command, cmd, page);
-							return true;
-						} catch (Exception ex) {
 							try {
 								return command.execute(sender, cmd, args);
 							} catch (Exception ex1) {
 								ChatUtils.error(sender, "Exception caught while executing this command.");
-								ex.printStackTrace();
+								ex1.printStackTrace();
 							}
+						} catch (Exception ex) {
+							int page = Integer.parseInt(args[0]);
+							this.getCommands(sender, command, cmd, page);
+							return true;
 						}
 					}
 				} catch (Exception ex) {

@@ -10,18 +10,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.cyprias.AdminNotes.command.CommandManager;
 import com.cyprias.AdminNotes.command.CreateCommand;
+import com.cyprias.AdminNotes.command.ListCommand;
 import com.cyprias.AdminNotes.configuration.Config;
 import com.cyprias.AdminNotes.database.Database;
 import com.cyprias.AdminNotes.database.MySQL;
 
 public class Plugin extends JavaPlugin {
-	static PluginDescriptionFile description;
+	//static PluginDescriptionFile description;
 	private static Plugin instance = null;
 	private File configFile;
 	public void onLoad() {
-		description = getDescription();
-
-
+	//	description = getDescription();
 	}
 
 	public static Database database;
@@ -49,7 +48,8 @@ public class Plugin extends JavaPlugin {
 		}
 		
 		CommandManager cm = new CommandManager()
-			.registerCommand("create", new CreateCommand());
+			.registerCommand("create", new CreateCommand())
+			.registerCommand("list", new ListCommand());
 		
 		this.getCommand("notes").setExecutor(cm);
 		
@@ -98,5 +98,23 @@ public class Plugin extends JavaPlugin {
 			bldr.append(args[i]);
 		}
 		return bldr.toString();
+	}
+	
+	public static boolean isInt(final String sInt) {
+		try {
+			Integer.parseInt(sInt);
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean isDouble(final String sDouble) {
+		try {
+			Double.parseDouble(sDouble);
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		return true;
 	}
 }
