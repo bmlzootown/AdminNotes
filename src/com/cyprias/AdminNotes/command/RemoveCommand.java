@@ -42,8 +42,14 @@ public class RemoveCommand implements Command {
 			if (note != null){
 				SimpleDateFormat f = new SimpleDateFormat(Config.getString("properties.date-format"));
 				String date = f.format((long) note.getTime() * 1000); 
-				Logger.info("Removing #"+id+" by " + note.getWriter() + " on "+date+": " + note.getText());
+				Logger.info(sender.getName()+" removed #"+id+" by " + note.getWriter() + " on "+date+": " + note.getText());
+				
+				ChatColor G = ChatColor.GRAY;
+				ChatColor W = ChatColor.WHITE;
+				
+				ChatUtils.send(sender, G+String.format("Removed #%s by %s on %s: %s", W+String.valueOf(id)+G, W+note.getWriter()+G , W+date+G, W+note.getText()+G));
 				note.remove();
+				
 			}else{
 				ChatUtils.error(sender, "Could not find info on id #" + id);
 				return true;

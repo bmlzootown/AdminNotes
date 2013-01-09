@@ -1,12 +1,18 @@
 package com.cyprias.AdminNotes;
 
 import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Arrays;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
+import org.xml.sax.SAXException;
 
 import com.cyprias.AdminNotes.command.CommandManager;
 import com.cyprias.AdminNotes.command.CreateCommand;
@@ -18,6 +24,7 @@ import com.cyprias.AdminNotes.command.SearchCommand;
 import com.cyprias.AdminNotes.configuration.Config;
 import com.cyprias.AdminNotes.database.Database;
 import com.cyprias.AdminNotes.database.MySQL;
+import com.cyprias.AdminNotes.database.SQLite;
 import com.cyprias.AdminNotes.listeners.PlayerListener;
 
 public class Plugin extends JavaPlugin {
@@ -33,13 +40,15 @@ public class Plugin extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 
-		//File dataFolder = getDataFolder();
-		//configFile = new File(dataFolder, "config.yml");
+		// File dataFolder = getDataFolder();
+		// configFile = new File(dataFolder, "config.yml");
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 
 		if (Config.getString("properties.db-type").equalsIgnoreCase("mysql")) {
 			database = new MySQL();
+		} else if (Config.getString("properties.db-type").equalsIgnoreCase("sqlite")) {
+			database = new SQLite();
 		} else {
 			Logger.severe("No database selected (" + Config.getString("properties.db-type") + "), unloading plugin...");
 			instance.getPluginLoader().disablePlugin(instance);
@@ -54,17 +63,68 @@ public class Plugin extends JavaPlugin {
 
 		registerListeners(new PlayerListener());
 
-		CommandManager cm = new CommandManager()
-			.registerCommand("create", new CreateCommand())
-			.registerCommand("info", new InfoCommand())
-			.registerCommand("list", new ListCommand())
-			.registerCommand("notify", new NotifyCommand())
-			.registerCommand("search", new SearchCommand())
+		CommandManager cm = new CommandManager().registerCommand("create", new CreateCommand()).registerCommand("info", new InfoCommand())
+			.registerCommand("list", new ListCommand()).registerCommand("notify", new NotifyCommand()).registerCommand("search", new SearchCommand())
 			.registerCommand("remove", new RemoveCommand());
 
 		this.getCommand("notes").setExecutor(cm);
 
+		try {
+			Metrics metrics = new Metrics(this);
+			metrics.start();
+		} catch (IOException e) {
+		}
+
+		if (Config.getBoolean("properties.check-new-version")) {
+			try {
+				VersionChecker version = new VersionChecker(this, "http://dev.bukkit.org/server-mods/adminnotes/files.rss");
+
+				VersionChecker.versionInfo info = (version.versions.size() > 0) ? version.versions.get(0) : null;
+				if (info == null)
+					return;
+				
+				String curVersion = getDescription().getVersion();
+
+				int compare = VersionChecker.compareVersions(curVersion, info.getTitle());
+				// plugin.info("curVersion: " + curVersion +", title: " +
+				// info.getTitle() + ", compare: " + compare);
+				if (compare < 0) {
+					Logger.warning("We're running v" + curVersion + ", v" + info.getTitle() + " is available");
+					Logger.warning(info.getLink());
+				}
+
+			} catch (SAXException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ParserConfigurationException e) {
+				e.printStackTrace();
+			}
+
+		}
+
 		Logger.info("enabled.");
+	}
+
+	private static class getVersionInfoTask implements Runnable {
+		private Object[] args;
+		private String pluginName, curseRSS;
+		private PluginManager pm;
+
+		public getVersionInfoTask(PluginManager pm, String pluginName, String curseRSS) {
+			this.pm = pm;
+			this.pluginName = pluginName;
+			this.curseRSS = curseRSS;
+		}
+
+		public void setArgs(Object... args) {
+			this.args = args;
+		}
+
+		@Override
+		public void run() {
+
+		}
 	}
 
 	private void registerListeners(Listener... listeners) {

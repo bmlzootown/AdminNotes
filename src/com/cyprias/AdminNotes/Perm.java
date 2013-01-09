@@ -1,6 +1,5 @@
 package com.cyprias.AdminNotes;
 
-import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
