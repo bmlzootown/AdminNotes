@@ -17,4 +17,6 @@ public interface Database {
 	
 	Boolean create(CommandSender sender, Boolean notify, String player, String text) throws SQLException;
 	
+	Note info(int id) throws SQLException;
+	
 }

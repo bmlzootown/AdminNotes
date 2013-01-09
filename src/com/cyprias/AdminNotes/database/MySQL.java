@@ -46,15 +46,17 @@ public class MySQL implements Database {
 		
 		int rows = getResultCount("SELECT COUNT(*) FROM " + notes_table);
 
-		//Logger.info("rows: " + rows);
+		Logger.info("rows: " + rows);
 		
 		int perPage = Config.getInt("properties.notes-per-page");
 		
-		//Logger.info("page1: " + page);
-		int max = (rows / 10) + 1;
+		Logger.info("page1: " + page);
+		int max = (rows / perPage);// + 1;
+		
 		if (rows % perPage == 0)
 			max--;
 		
+		Logger.info("max: " + max);
 		if (page < 0){
 			page = max - (Math.abs(page) - 1);
 		}else{
@@ -62,7 +64,8 @@ public class MySQL implements Database {
 				page = max;
 			
 		}
-
+		Logger.info("page2: " + page);
+		
 		ChatUtils.send(sender, "Page: " + (page+1) + "/" + (max+1));
 		List<Note> notes = new ArrayList<Note>();
 		
@@ -77,7 +80,7 @@ public class MySQL implements Database {
 			
 		}
 		
-		
+		results.close();
 		
 		return notes;
 	}
@@ -113,11 +116,8 @@ public class MySQL implements Database {
 	
 	public static queryReturn executeQuery(String query, Object... args) throws SQLException {
 		Connection con = getConnection();
-
 		queryReturn myreturn = null;// = new queryReturn();
-
 		PreparedStatement statement = con.prepareStatement(query);
-
 		int i = 0;
 		for (Object a : args) {
 			i += 1;
@@ -126,7 +126,6 @@ public class MySQL implements Database {
 		}
 		ResultSet result = statement.executeQuery();
 		myreturn = new queryReturn(con, statement, result);
-
 		return myreturn;
 	}
 	
@@ -186,6 +185,24 @@ public class MySQL implements Database {
 		sucessful = statement.executeUpdate();
 		con.close();
 		return sucessful;
+	}
+
+	@Override
+	public Note info(int id) throws SQLException {
+		
+		queryReturn results = executeQuery("SELECT * FROM `"+notes_table+"` WHERE `id` = ? LIMIT 0 , 1", id);
+		ResultSet r = results.result;
+
+		Note note = null;
+		while (r.next()) {
+		//	Logger.info("id: " + r.getInt(1));
+			note = new Note(r.getInt(1), r.getInt(2), r.getBoolean(3), r.getString(4), r.getString(5), r.getString(6));
+			
+		}
+		
+		results.close();
+		
+		return note;
 	}
 	
 	

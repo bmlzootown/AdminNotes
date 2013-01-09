@@ -72,7 +72,7 @@ public class ChatUtils {
 	}
 
 	public static void sendCommandHelp(CommandSender sender, String prefix, String line, org.bukkit.command.Command cmd) {
-		sendRaw(sender, ChatColor.GOLD, prefix + line, cmd.getLabel());
+		sendRaw(sender, ChatColor.GRAY, prefix + line, cmd.getLabel());
 	}
 
 	public static boolean sendCommandHelp(CommandSender sender, Perm permission, String line, org.bukkit.command.Command cmd) {
@@ -82,7 +82,7 @@ public class ChatUtils {
 	public static boolean sendCommandHelp(CommandSender sender, Perm permission, String prefix, String line, org.bukkit.command.Command cmd) {
 		if (!Plugin.hasPermission(sender, permission))
 			return false;
-		sendRaw(sender, ChatColor.GOLD, prefix + line, cmd.getLabel());
+		sendRaw(sender, ChatColor.GRAY, prefix + line, cmd.getLabel());
 		return true;
 	}
 

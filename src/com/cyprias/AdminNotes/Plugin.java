@@ -10,6 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.cyprias.AdminNotes.command.CommandManager;
 import com.cyprias.AdminNotes.command.CreateCommand;
+import com.cyprias.AdminNotes.command.InfoCommand;
 import com.cyprias.AdminNotes.command.ListCommand;
 import com.cyprias.AdminNotes.configuration.Config;
 import com.cyprias.AdminNotes.database.Database;
@@ -49,6 +50,7 @@ public class Plugin extends JavaPlugin {
 		
 		CommandManager cm = new CommandManager()
 			.registerCommand("create", new CreateCommand())
+			.registerCommand("info", new InfoCommand())
 			.registerCommand("list", new ListCommand());
 		
 		this.getCommand("notes").setExecutor(cm);

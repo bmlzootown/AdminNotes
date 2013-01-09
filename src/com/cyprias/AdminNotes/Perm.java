@@ -11,8 +11,9 @@ public enum Perm {
 	LIST("adminnotes.list", "You do not have permission list notes."), 
 	CREATE("adminnotes.create", "You do not have permission to create notes."),
 	CREATE_NOTIFIED("adminnotes.create-notified"),
+	INFO("adminnotes.info", "You do not have permissiont to see note info."), 
 	
-	PARENT_MOD("lottery.mod", LIST, CREATE_NOTIFIED),
+	PARENT_MOD("lottery.mod", LIST, CREATE_NOTIFIED, INFO),
 	PARENT_ADMIN("lottery.admin", PARENT_MOD, CREATE);
 
 	private Perm(String value, Perm... childrenArray) {
