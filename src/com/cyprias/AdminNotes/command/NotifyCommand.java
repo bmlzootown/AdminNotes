@@ -25,7 +25,11 @@ public class NotifyCommand implements Command {
 
 				ChatColor G = ChatColor.GRAY;
 				ChatColor W = ChatColor.WHITE;
-				ChatUtils.send(sender, G+"Notify on #" + W+id + G+ " set to " + W+String.valueOf(note.getNotify()));
+				
+				ChatColor NColour = (note.getNotify()) ? ChatColor.GOLD : ChatColor.WHITE;
+					//note.getColouredId()
+				
+				ChatUtils.send(sender, G+"Notify on #" + W+id + G+ " set to " + NColour+String.valueOf(note.getNotify()));
 				
 			}else{
 				ChatUtils.error(sender, "Failed to toggle notify on #" +  id);

@@ -38,7 +38,7 @@ public class CreateCommand implements Command {
 		SimpleDateFormat f = new SimpleDateFormat(Config.getString("properties.date-format"));
 		String date = f.format((long) note.getTime() * 1000); 
 			
-		ChatUtils.send(sender, ChatColor.GRAY+"Created note #" +ChatColor.WHITE+ note.getId() + ChatColor.GRAY + " on " + ChatColor.WHITE+date);
+		ChatUtils.send(sender, ChatColor.GRAY+"Created note #" +note.getColouredId() + ChatColor.GRAY + " on " + ChatColor.WHITE+date);
 		String senderName = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
 
 		ChatUtils.broadcast(Perm.CREATE_NOTIFIED, String.format((ChatColor.WHITE+"%s "+ChatColor.GRAY+"created note on "+ChatColor.WHITE+"%s"+ChatColor.GRAY+": "+ChatColor.WHITE+"%s"),senderName, player, text));

@@ -2,6 +2,8 @@ package com.cyprias.AdminNotes;
 
 import java.sql.SQLException;
 
+import org.bukkit.ChatColor;
+
 public class Note {
 
 	public Note(int int1, int int2, boolean boolean1, String string, String string2, String string3) {
@@ -20,6 +22,13 @@ public class Note {
 		return this.id;
 	}
 
+	public String getColouredId(){
+		if (this.notify)
+			return ChatColor.GOLD + String.valueOf(this.id)+ChatColor.RESET;
+
+		return ChatColor.WHITE + String.valueOf(this.id)+ChatColor.RESET;
+	}
+	
 	public int getTime(){
 		return this.time;
 	}

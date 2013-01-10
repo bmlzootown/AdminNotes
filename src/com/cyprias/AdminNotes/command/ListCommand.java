@@ -27,7 +27,7 @@ public class ListCommand implements Command {
 			for (int i=0; i<notes.size(); i++){
 				note = notes.get(i);
 
-				ChatUtils.send(sender, String.format((ChatColor.GRAY+"["+ChatColor.WHITE+"%s"+ChatColor.GRAY+"] "+ChatColor.WHITE+"%s"+ChatColor.GRAY+": "+ChatColor.WHITE+"%s"), note.getId(), note.getPlayer(), note.getText()));
+				ChatUtils.send(sender, String.format((ChatColor.GRAY+"[%s"+ChatColor.GRAY+"] "+ChatColor.WHITE+"%s"+ChatColor.GRAY+": "+ChatColor.WHITE+"%s"), note.getColouredId(), note.getPlayer(), note.getText()));
 				
 			}
 			
