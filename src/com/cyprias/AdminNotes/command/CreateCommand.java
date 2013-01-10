@@ -19,7 +19,24 @@ public class CreateCommand implements Command {
 			list.add("/%s create - Create a note.");
 	}
 
-	public boolean execute(CommandSender sender, org.bukkit.command.Command cmd, String[] args) {
+	private void DBQuery(CommandSender sender, String player, String text){
+		try {
+			Plugin.database.create(sender, Config.getBoolean("properties.notify-by-default"), player, text);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			ChatUtils.error(sender, "An error has occured: " + e.getLocalizedMessage());
+			
+			return;
+		}
+		
+		ChatUtils.send(sender, "Created note.");
+		String senderName = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
+
+		ChatUtils.broadcast(Perm.CREATE_NOTIFIED, String.format((ChatColor.WHITE+"%s "+ChatColor.GRAY+"created note on "+ChatColor.WHITE+"%s"+ChatColor.GRAY+": "+ChatColor.WHITE+"%s"),senderName, player, text));
+		
+	}
+	
+	public boolean execute(final CommandSender sender, org.bukkit.command.Command cmd, String[] args) {
 		if (!Plugin.hasPermission(sender, Perm.CREATE)) {
 			return false;
 		}
@@ -32,25 +49,21 @@ public class CreateCommand implements Command {
 			ChatUtils.sendCommandHelp(sender, Perm.CREATE, "/%s create <player> <note>", cmd);
 			return true;
 		}
-		String player = args[0];
-		String text = Plugin.getFinalArg(args, 1);
-		text = ChatColor.stripColor(text);
-		
-		
-		try {
-			Plugin.database.create(sender, Config.getBoolean("properties.notify-by-default"), player, text);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			ChatUtils.error(sender, "An error has occured: " + e.getLocalizedMessage());
-			
-			return true;
+		final String player = args[0];
+		final String text = ChatColor.stripColor(Plugin.getFinalArg(args, 1));
+
+		if (Config.getBoolean("properties.async-db-queries")){
+			Plugin instance = Plugin.getInstance();
+			instance.getServer().getScheduler().runTaskAsynchronously(instance, new Runnable() {
+				public void run() {
+					DBQuery(sender, player, text);
+				}
+			});
+		} else {
+			DBQuery(sender, player, text);
 		}
 		
-		ChatUtils.send(sender, "Created note.");
-		String senderName = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
 
-		ChatUtils.broadcast(Perm.CREATE_NOTIFIED, String.format((ChatColor.WHITE+"%s "+ChatColor.GRAY+"created note on "+ChatColor.WHITE+"%s"+ChatColor.GRAY+": "+ChatColor.WHITE+"%s"),senderName, player, text));
-		
 		return true;
 	}
 

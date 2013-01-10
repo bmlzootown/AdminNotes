@@ -7,6 +7,7 @@ properties:
   notes-per-page: 5
   date-format: "MM/dd/yy h:mm a"
   check-new-version: true
+  async-db-queries: true
 mysql:
   hostname: localhost
   username: root

@@ -7,10 +7,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import com.cyprias.AdminNotes.ChatUtils;
-import com.cyprias.AdminNotes.Logger;
 import com.cyprias.AdminNotes.Note;
 import com.cyprias.AdminNotes.Perm;
 import com.cyprias.AdminNotes.Plugin;
+import com.cyprias.AdminNotes.configuration.Config;
 
 public class ListCommand implements Command {
 
@@ -19,22 +19,7 @@ public class ListCommand implements Command {
 			list.add("/%s list - List all notes.");
 	}
 
-	public boolean execute(CommandSender sender, org.bukkit.command.Command cmd, String[] args) {
-		if (!Plugin.hasPermission(sender, Perm.LIST)) 
-			return false;
-		
-		int page = -1; //Default to last page.
-		if (args.length > 0) {// && args[1].equalsIgnoreCase("compact"))
-			if (Plugin.isInt(args[0])) {
-				page = Integer.parseInt(args[0]);
-				if (page>0)
-					page-=1;
-			} else {
-				ChatUtils.error(sender, "Invalid page: " +  args[0]);
-				return true;
-			}
-		}
-		
+	private void DBQuery(CommandSender sender, int page){
 		try {
 			List<Note> notes = Plugin.database.list(sender, page);
 			
@@ -50,8 +35,40 @@ public class ListCommand implements Command {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ChatUtils.error(sender, e.getLocalizedMessage());
-			return true;
+			return;
 		}
+	}
+	
+	public boolean execute(final CommandSender sender, org.bukkit.command.Command cmd, String[] args) {
+		if (!Plugin.hasPermission(sender, Perm.LIST)) 
+			return false;
+		
+		int page = -1; //Default to last page.
+		if (args.length > 0) {// && args[1].equalsIgnoreCase("compact"))
+			if (Plugin.isInt(args[0])) {
+				page = Integer.parseInt(args[0]);
+				if (page>0)
+					page-=1;
+			} else {
+				ChatUtils.error(sender, "Invalid page: " +  args[0]);
+				return true;
+			}
+		}
+		
+		
+		
+		if (Config.getBoolean("properties.async-db-queries")){
+			final int fpage = page;
+			Plugin instance = Plugin.getInstance();
+			instance.getServer().getScheduler().runTaskAsynchronously(instance, new Runnable() {
+				public void run() {
+					DBQuery(sender, fpage);
+				}
+			});
+		} else {
+			DBQuery(sender, page);
+		}
+		
 		
 		return true;
 	}

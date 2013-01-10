@@ -11,6 +11,7 @@ import com.cyprias.AdminNotes.Note;
 import com.cyprias.AdminNotes.Perm;
 import com.cyprias.AdminNotes.Plugin;
 import com.cyprias.AdminNotes.SearchParser;
+import com.cyprias.AdminNotes.configuration.Config;
 
 public class SearchCommand implements Command {
 
@@ -19,8 +20,22 @@ public class SearchCommand implements Command {
 			list.add("/%s search - Search notes.");
 	}
 
+	private void DBQuery(CommandSender sender, SearchParser parser){
+		try {
+			List<Note> notes = Plugin.database.search(parser);
+			Note note;
+			for (int i=0; i<notes.size(); i++){
+				note = notes.get(i);
+				ChatUtils.send(sender, String.format((ChatColor.GRAY+"["+ChatColor.WHITE+"%s"+ChatColor.GRAY+"] "+ChatColor.WHITE+"%s"+ChatColor.GRAY+": "+ChatColor.WHITE+"%s"), note.getId(), note.getPlayer(), note.getText()));
+			}
+		} catch (SQLException e) {
+			ChatUtils.error(sender, e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
-	public boolean execute(CommandSender sender, org.bukkit.command.Command cmd, String[] args) {
+	public boolean execute(final CommandSender sender, org.bukkit.command.Command cmd, String[] args) {
 		if (!Plugin.hasPermission(sender, Perm.SEARCH))
 			return false;
 
@@ -39,27 +54,18 @@ public class SearchCommand implements Command {
 		}
 		//new SearchQuery(new SearchCallback(session), parser, SearchDir.DESC);
 		
-
-		try {
-			List<Note> notes = Plugin.database.search(parser);
+		if (Config.getBoolean("properties.async-db-queries")){
+			final SearchParser fparser = parser;
 			
-			
-			
-			Note note;
-			for (int i=0; i<notes.size(); i++){
-				note = notes.get(i);
-				ChatUtils.send(sender, String.format((ChatColor.GRAY+"["+ChatColor.WHITE+"%s"+ChatColor.GRAY+"] "+ChatColor.WHITE+"%s"+ChatColor.GRAY+": "+ChatColor.WHITE+"%s"), note.getId(), note.getPlayer(), note.getText()));
-			}
-			
-			
-			
-		} catch (SQLException e) {
-			ChatUtils.error(sender, e.getMessage());
-			e.printStackTrace();
+			Plugin instance = Plugin.getInstance();
+			instance.getServer().getScheduler().runTaskAsynchronously(instance, new Runnable() {
+				public void run() {
+					DBQuery(sender, fparser);
+				}
+			});
+		} else {
+			DBQuery(sender, parser);
 		}
-		
-		
-		
 		
 		return false;
 	}

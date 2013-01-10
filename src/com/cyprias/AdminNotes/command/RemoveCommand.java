@@ -16,8 +16,35 @@ import com.cyprias.AdminNotes.configuration.Config;
 
 public class RemoveCommand implements Command {
 
+	private void DBQuery(CommandSender sender, int id){
+		try {
+			Note note = Plugin.database.info(id);
+			
+			if (note != null){
+				SimpleDateFormat f = new SimpleDateFormat(Config.getString("properties.date-format"));
+				String date = f.format((long) note.getTime() * 1000); 
+				Logger.info(sender.getName()+" removed #"+id+" by " + note.getWriter() + " on "+date+": " + note.getText());
+				
+				ChatColor G = ChatColor.GRAY;
+				ChatColor W = ChatColor.WHITE;
+				
+				ChatUtils.send(sender, G+String.format("Removed #%s by %s on %s: %s", W+String.valueOf(id)+G, W+note.getWriter()+G , W+date+G, W+note.getText()+G));
+				note.remove();
+				
+			}else{
+				ChatUtils.error(sender, "Could not find info on id #" + id);
+				return;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			ChatUtils.error(sender, e.getLocalizedMessage());
+			return;
+		}
+	}
+	
 	@Override
-	public boolean execute(CommandSender sender, org.bukkit.command.Command cmd, String[] args) {
+	public boolean execute(final CommandSender sender, org.bukkit.command.Command cmd, String[] args) {
 		if (!Plugin.hasPermission(sender, Perm.INFO)) 
 			return false;
 		
@@ -36,29 +63,17 @@ public class RemoveCommand implements Command {
 			}
 		}
 		
-		try {
-			Note note = Plugin.database.info(id);
-			
-			if (note != null){
-				SimpleDateFormat f = new SimpleDateFormat(Config.getString("properties.date-format"));
-				String date = f.format((long) note.getTime() * 1000); 
-				Logger.info(sender.getName()+" removed #"+id+" by " + note.getWriter() + " on "+date+": " + note.getText());
-				
-				ChatColor G = ChatColor.GRAY;
-				ChatColor W = ChatColor.WHITE;
-				
-				ChatUtils.send(sender, G+String.format("Removed #%s by %s on %s: %s", W+String.valueOf(id)+G, W+note.getWriter()+G , W+date+G, W+note.getText()+G));
-				note.remove();
-				
-			}else{
-				ChatUtils.error(sender, "Could not find info on id #" + id);
-				return true;
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			ChatUtils.error(sender, e.getLocalizedMessage());
-			return true;
+		
+		if (Config.getBoolean("properties.async-db-queries")){
+			final int fid = id;
+			Plugin instance = Plugin.getInstance();
+			instance.getServer().getScheduler().runTaskAsynchronously(instance, new Runnable() {
+				public void run() {
+					DBQuery(sender, fid);
+				}
+			});
+		} else {
+			DBQuery(sender, id);
 		}
 		
 		

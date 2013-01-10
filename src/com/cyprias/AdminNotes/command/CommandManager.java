@@ -13,7 +13,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import com.cyprias.AdminNotes.ChatUtils;
-import com.cyprias.AdminNotes.Logger;
 import com.cyprias.AdminNotes.Plugin;
 
 public class CommandManager implements CommandExecutor, Listable {

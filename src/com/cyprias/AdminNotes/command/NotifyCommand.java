@@ -9,6 +9,7 @@ import com.cyprias.AdminNotes.ChatUtils;
 import com.cyprias.AdminNotes.Note;
 import com.cyprias.AdminNotes.Perm;
 import com.cyprias.AdminNotes.Plugin;
+import com.cyprias.AdminNotes.configuration.Config;
 
 public class NotifyCommand implements Command {
 	public void listCommands(CommandSender sender, List<String> list) {
@@ -16,7 +17,26 @@ public class NotifyCommand implements Command {
 			list.add("/%s notify - Toggle notify on login flag");
 	}
 
-	public boolean execute(CommandSender sender, org.bukkit.command.Command cmd, String[] args) {
+	private void DBQuery(CommandSender sender, int id){
+		try {
+			Boolean success = Plugin.database.notify(id);
+			if (success){
+				Note note = Plugin.database.info(id);
+
+				ChatColor G = ChatColor.GRAY;
+				ChatColor W = ChatColor.WHITE;
+				ChatUtils.send(sender, G+"Notify on #" + W+id + G+ " set to " + W+String.valueOf(note.getNotify()));
+				
+			}else{
+				ChatUtils.error(sender, "Failed to toggle notify on #" +  id);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			ChatUtils.error(sender,  e.getLocalizedMessage());
+		}
+	}
+	
+	public boolean execute(final CommandSender sender, org.bukkit.command.Command cmd, String[] args) {
 		if (!Plugin.hasPermission(sender, Perm.NOTIFY)) {
 			return false;
 		}
@@ -36,24 +56,19 @@ public class NotifyCommand implements Command {
 		}
 		
 		
-		try {
-			Boolean success = Plugin.database.notify(id);
-			if (success){
-				Note note = Plugin.database.info(id);
-
-				ChatColor G = ChatColor.GRAY;
-				ChatColor W = ChatColor.WHITE;
-				ChatUtils.send(sender, G+"Notify on #" + W+id + G+ " set to " + W+String.valueOf(note.getNotify()));
-				
-			}else{
-			//	ChatUtils.send(sender, "Failed to toggle notify on #" +  args[0]);
-				ChatUtils.error(sender, "Failed to toggle notify on #" +  args[0]);
-				
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			ChatUtils.error(sender,  e.getLocalizedMessage());
+		
+		if (Config.getBoolean("properties.async-db-queries")){
+			final int fid = id;
+			Plugin instance = Plugin.getInstance();
+			instance.getServer().getScheduler().runTaskAsynchronously(instance, new Runnable() {
+				public void run() {
+					DBQuery(sender, fid);
+				}
+			});
+		} else {
+			DBQuery(sender, id);
 		}
+
 
 		return true;
 	}
