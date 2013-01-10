@@ -109,6 +109,11 @@ public class SQLite implements Database {
 
 		ChatUtils.send(sender, "Page: " + (page+1) + "/" + (max+1));
 		List<Note> notes = new ArrayList<Note>();
+		
+		if (rows == 0)
+			return notes;
+		
+		
 		queryReturn results = executeQuery("SELECT * FROM `"+notes_table+"` LIMIT "+(perPage * page)+" , " + perPage);
 		ResultSet r = results.result;
 

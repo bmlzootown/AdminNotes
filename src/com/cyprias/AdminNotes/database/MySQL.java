@@ -16,6 +16,7 @@ import com.cyprias.AdminNotes.Note;
 import com.cyprias.AdminNotes.Plugin;
 import com.cyprias.AdminNotes.SearchParser;
 import com.cyprias.AdminNotes.configuration.Config;
+import com.cyprias.AdminNotes.database.SQLite.queryReturn;
 
 public class MySQL implements Database {
 
@@ -45,8 +46,11 @@ public class MySQL implements Database {
 
 	public List<Note> list(CommandSender sender, int page) throws SQLException {
 		
+		
 		int rows = getResultCount("SELECT COUNT(*) FROM " + notes_table);
 
+
+		
 		//Logger.info("rows: " + rows);
 		
 		int perPage = Config.getInt("properties.notes-per-page");
@@ -65,12 +69,12 @@ public class MySQL implements Database {
 				page = max;
 			
 		}
-		//Logger.info("page2: " + page);
-		
+
 		ChatUtils.send(sender, "Page: " + (page+1) + "/" + (max+1));
 		List<Note> notes = new ArrayList<Note>();
 		
-		
+		if (rows == 0)
+			return notes;
 		
 		queryReturn results = executeQuery("SELECT * FROM `"+notes_table+"` LIMIT "+(perPage * page)+" , " + perPage);
 		ResultSet r = results.result;
@@ -78,11 +82,9 @@ public class MySQL implements Database {
 		while (r.next()) {
 		//	Logger.info("id: " + r.getInt(1));
 			notes.add(new Note(r.getInt(1), r.getInt(2), r.getBoolean(3), r.getString(4), r.getString(5), r.getString(6)));
-			
 		}
-		
+
 		results.close();
-		
 		return notes;
 	}
 	
