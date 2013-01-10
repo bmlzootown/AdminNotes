@@ -18,6 +18,7 @@ import com.cyprias.AdminNotes.Note;
 import com.cyprias.AdminNotes.Plugin;
 import com.cyprias.AdminNotes.SearchParser;
 import com.cyprias.AdminNotes.configuration.Config;
+import com.cyprias.AdminNotes.database.MySQL.queryReturn;
 
 public class SQLite implements Database {
 	private static String sqlDB;
@@ -139,6 +140,17 @@ public class SQLite implements Database {
 		sucessful = statement.executeUpdate();
 		con.close();
 		return sucessful;
+	}
+	
+	public Note last() throws SQLException {
+		queryReturn results = executeQuery("SELECT * FROM `"+notes_table+"` ORDER BY `id` DESC LIMIT 0 , 1");
+		ResultSet r = results.result;
+		Note note = null;
+		while (r.next()) {
+			note = new Note(r.getInt(1), r.getInt(2), r.getBoolean(3), r.getString(4), r.getString(5), r.getString(6));
+		}
+		results.close();
+		return note;
 	}
 	
 	@Override

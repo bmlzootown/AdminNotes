@@ -29,5 +29,6 @@ public interface Database {
 	
 	Boolean remove(int id) throws SQLException;
 	
+	Note last() throws SQLException;
 	
 }

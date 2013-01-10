@@ -1,6 +1,7 @@
 package com.cyprias.AdminNotes.command;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -8,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.cyprias.AdminNotes.ChatUtils;
+import com.cyprias.AdminNotes.Note;
 import com.cyprias.AdminNotes.Perm;
 import com.cyprias.AdminNotes.Plugin;
 import com.cyprias.AdminNotes.configuration.Config;
@@ -20,8 +22,12 @@ public class CreateCommand implements Command {
 	}
 
 	private void DBQuery(CommandSender sender, String player, String text){
+		Note note;
 		try {
 			Plugin.database.create(sender, Config.getBoolean("properties.notify-by-default"), player, text);
+			
+			note = Plugin.database.last();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ChatUtils.error(sender, "An error has occured: " + e.getLocalizedMessage());
@@ -29,7 +35,10 @@ public class CreateCommand implements Command {
 			return;
 		}
 		
-		ChatUtils.send(sender, "Created note.");
+		SimpleDateFormat f = new SimpleDateFormat(Config.getString("properties.date-format"));
+		String date = f.format((long) note.getTime() * 1000); 
+			
+		ChatUtils.send(sender, ChatColor.GRAY+"Created note #" +ChatColor.WHITE+ note.getId() + ChatColor.GRAY + " on " + ChatColor.WHITE+date);
 		String senderName = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
 
 		ChatUtils.broadcast(Perm.CREATE_NOTIFIED, String.format((ChatColor.WHITE+"%s "+ChatColor.GRAY+"created note on "+ChatColor.WHITE+"%s"+ChatColor.GRAY+": "+ChatColor.WHITE+"%s"),senderName, player, text));

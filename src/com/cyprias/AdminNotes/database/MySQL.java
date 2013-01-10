@@ -226,6 +226,19 @@ public class MySQL implements Database {
 	}
 
 	@Override
+	public Note last() throws SQLException {
+		queryReturn results = executeQuery("SELECT * FROM `"+notes_table+"` ORDER BY `id` DESC LIMIT 0 , 1");
+		ResultSet r = results.result;
+		Note note = null;
+		while (r.next()) {
+			note = new Note(r.getInt(1), r.getInt(2), r.getBoolean(3), r.getString(4), r.getString(5), r.getString(6));
+		}
+		results.close();
+		return note;
+	}
+
+	
+	@Override
 	public Boolean notify(int id) throws SQLException {
 		int succsess = executeUpdate("UPDATE `"+notes_table+"` SET `notify` = !`notify` WHERE `id` = ?;", id);
 		return (succsess > 0) ? true : false;
@@ -281,6 +294,7 @@ public class MySQL implements Database {
 		int succsess = executeUpdate("DELETE FROM `"+notes_table+"` WHERE `id` = ?", id);
 		return (succsess > 0) ? true : false;
 	}
+
 
 	
 }
