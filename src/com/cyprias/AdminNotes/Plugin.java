@@ -7,6 +7,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -142,6 +143,9 @@ public class Plugin extends JavaPlugin {
 
 	static public boolean hasPermission(CommandSender sender, Perm permission) {
 		if (sender != null) {
+			if (sender instanceof ConsoleCommandSender)
+				return true;
+			
 			if (sender.hasPermission(permission.getPermission())) {
 				return true;
 			} else {
