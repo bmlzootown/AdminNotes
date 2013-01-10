@@ -1,12 +1,11 @@
 package com.cyprias.AdminNotes;
 
-import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Arrays;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -61,6 +60,8 @@ public class Plugin extends JavaPlugin {
 			return;
 		}
 
+		loadPermissions();
+
 		registerListeners(new PlayerListener());
 
 		CommandManager cm = new CommandManager().registerCommand("create", new CreateCommand()).registerCommand("info", new InfoCommand())
@@ -75,13 +76,20 @@ public class Plugin extends JavaPlugin {
 		} catch (IOException e) {
 		}
 
-		if (Config.getBoolean("properties.check-new-version")) 
+		if (Config.getBoolean("properties.check-new-version"))
 			checkVersion();
 
 		Logger.info("enabled.");
 	}
 
-	private void checkVersion(){
+	private void loadPermissions() {
+		PluginManager pm = Bukkit.getPluginManager();
+		for (Perm permission : Perm.values()) {
+			permission.loadPermission(pm);
+		}
+	}
+
+	private void checkVersion() {
 		getServer().getScheduler().runTaskAsynchronously(instance, new Runnable() {
 			public void run() {
 
@@ -91,7 +99,8 @@ public class Plugin extends JavaPlugin {
 					if (info != null) {
 						String curVersion = getDescription().getVersion();
 						int compare = VersionChecker.compareVersions(curVersion, info.getTitle());
-						// plugin.info("curVersion: " + curVersion +", title: " +
+						// plugin.info("curVersion: " + curVersion +", title: "
+						// +
 						// info.getTitle() + ", compare: " + compare);
 						if (compare < 0) {
 							Logger.warning("We're running v" + curVersion + ", v" + info.getTitle() + " is available");
@@ -105,30 +114,9 @@ public class Plugin extends JavaPlugin {
 				} catch (ParserConfigurationException e) {
 					e.printStackTrace();
 				}
-				
+
 			}
 		});
-	}
-	
-	private static class getVersionInfoTask implements Runnable {
-		private Object[] args;
-		private String pluginName, curseRSS;
-		private PluginManager pm;
-
-		public getVersionInfoTask(PluginManager pm, String pluginName, String curseRSS) {
-			this.pm = pm;
-			this.pluginName = pluginName;
-			this.curseRSS = curseRSS;
-		}
-
-		public void setArgs(Object... args) {
-			this.args = args;
-		}
-
-		@Override
-		public void run() {
-
-		}
 	}
 
 	private void registerListeners(Listener... listeners) {
@@ -162,6 +150,17 @@ public class Plugin extends JavaPlugin {
 			}
 		}
 		return false;
+	}
+
+	public static boolean checkPermission(CommandSender sender, Perm permission) {
+		if (!hasPermission(sender, permission)) {
+			String mess = permission.getErrorMessage();
+			if (mess == null)
+				mess = Perm.DEFAULT_ERROR_MESSAGE;
+			ChatUtils.error(sender, mess);
+			return false;
+		}
+		return true;
 	}
 
 	public static final Plugin getInstance() {

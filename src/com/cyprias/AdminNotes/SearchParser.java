@@ -1,13 +1,9 @@
 package com.cyprias.AdminNotes;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
-
-import com.cyprias.AdminNotes.configuration.Config;
 
 public class SearchParser {
 	public CommandSender player = null;

@@ -36,7 +36,7 @@ public class SearchCommand implements Command {
 	
 	@Override
 	public boolean execute(final CommandSender sender, org.bukkit.command.Command cmd, String[] args) {
-		if (!Plugin.hasPermission(sender, Perm.SEARCH))
+		if (!Plugin.checkPermission(sender, Perm.SEARCH))
 			return false;
 
 		if (args.length == 0){

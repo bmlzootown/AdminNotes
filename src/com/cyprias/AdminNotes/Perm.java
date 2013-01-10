@@ -1,5 +1,9 @@
 package com.cyprias.AdminNotes;
 
+import java.util.HashMap;
+
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
@@ -25,8 +29,7 @@ public enum Perm {
 	private Perm(String perm, String errorMess) {
 		this.permission = perm;
 		this.errorMessage = errorMess;
-		this.bukkitPerm = new org.bukkit.permissions.Permission(permission);
-		this.bukkitPerm.setDefault(PermissionDefault.getByName(Config.getString("properties.permission-default")));
+		this.bukkitPerm = new Permission(permission, PermissionDefault.getByName(Config.getString("properties.permission-default")));
 	}
 
 	private Perm(String value, String errorMess, Perm... childrenArray) {
@@ -35,36 +38,47 @@ public enum Perm {
 			child.setParent(this);
 		}
 	}
-
-	public void loadPermission(PluginManager pm) {
-		pm.addPermission(bukkitPerm);
+	public static HashMap<String, PermissionAttachment> permissions = new HashMap<String, PermissionAttachment>();
+	
+	private final String permission;
+	public static final String DEFAULT_ERROR_MESSAGE = "You do not have access to %s";
+	public Perm getParent() {
+		return parent;
 	}
 
+	private final Permission bukkitPerm;
+	private Perm parent;
+	private final String errorMessage;
+	
+	
 	private void setParent(Perm parentValue) {
 		if (this.parent != null)
 			return;
 		this.parent = parentValue;
 	}
-
-	public Perm getParent() {
-		return parent;
-	}
-
-	public org.bukkit.permissions.Permission getBukkitPerm() {
-		return bukkitPerm;
-	}
-
+	
 	public String getPermission() {
 		return permission;
 	}
-
+	
+	public void loadPermission(PluginManager pm) {
+		pm.addPermission(bukkitPerm);
+	}
+	
 	public String getErrorMessage() {
 		return errorMessage;
 	}
+	
+	/*
 
-	public static final String DEFAULT_ERROR_MESSAGE = "You do not have access to %s";
-	private final org.bukkit.permissions.Permission bukkitPerm;
-	private Perm parent;
-	private final String permission;
-	private final String errorMessage;
+
+
+	public Permission getBukkitPerm() {
+		return bukkitPerm;
+	}
+
+
+
+
+	*/
 }

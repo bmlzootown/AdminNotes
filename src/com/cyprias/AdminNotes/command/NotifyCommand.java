@@ -37,7 +37,7 @@ public class NotifyCommand implements Command {
 	}
 	
 	public boolean execute(final CommandSender sender, org.bukkit.command.Command cmd, String[] args) {
-		if (!Plugin.hasPermission(sender, Perm.NOTIFY)) {
+		if (!Plugin.checkPermission(sender, Perm.NOTIFY)) {
 			return false;
 		}
 		if (args.length == 0){

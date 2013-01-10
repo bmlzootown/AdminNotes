@@ -37,7 +37,7 @@ public class CreateCommand implements Command {
 	}
 	
 	public boolean execute(final CommandSender sender, org.bukkit.command.Command cmd, String[] args) {
-		if (!Plugin.hasPermission(sender, Perm.CREATE)) {
+		if (!Plugin.checkPermission(sender, Perm.CREATE)) {
 			return false;
 		}
 		if (args.length == 0){

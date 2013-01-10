@@ -40,7 +40,7 @@ public class ListCommand implements Command {
 	}
 	
 	public boolean execute(final CommandSender sender, org.bukkit.command.Command cmd, String[] args) {
-		if (!Plugin.hasPermission(sender, Perm.LIST)) 
+		if (!Plugin.checkPermission(sender, Perm.LIST)) 
 			return false;
 		
 		int page = -1; //Default to last page.
