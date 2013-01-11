@@ -11,7 +11,7 @@ properties:
 mysql:
   hostname: localhost
   username: root
-  password: 
+  password: CHANGEME
   port: 3306
   database: minecraft
   prefix: AN_

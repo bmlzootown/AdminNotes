@@ -21,14 +21,14 @@ public class RemoveCommand implements Command {
 			Note note = Plugin.database.info(id);
 			
 			if (note != null){
-				SimpleDateFormat f = new SimpleDateFormat(Config.getString("properties.date-format"));
-				String date = f.format((long) note.getTime() * 1000); 
-				Logger.info(sender.getName()+" removed #"+id+" by " + note.getWriter() + " on "+date+": " + note.getText());
+				//SimpleDateFormat f = new SimpleDateFormat(Config.getString("properties.date-format"));
+				//String date = f.format((long) note.getTime() * 1000); 
+				Logger.info(sender.getName()+" removed #"+id+" by " + note.getWriter() + " on "+note.getPlayer()+": " + note.getText());
 				
 				ChatColor G = ChatColor.GRAY;
 				ChatColor W = ChatColor.WHITE;
 				
-				ChatUtils.send(sender, G+String.format("Removed #%s by %s on %s: %s", W+String.valueOf(id)+G, W+note.getWriter()+G , W+date+G, W+note.getText()+G));
+				ChatUtils.send(sender, G+String.format("Removed #%s by %s on %s: %s", W+String.valueOf(id)+G, W+note.getWriter()+G , W+note.getPlayer()+G, W+note.getText()+G));
 				note.remove();
 				
 			}else{
