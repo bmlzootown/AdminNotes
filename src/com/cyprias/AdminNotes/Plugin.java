@@ -93,17 +93,12 @@ public class Plugin extends JavaPlugin {
 	private void checkVersion() {
 		getServer().getScheduler().runTaskAsynchronously(instance, new Runnable() {
 			public void run() {
-
 				try {
-					VersionChecker version = new VersionChecker(instance, "http://dev.bukkit.org/server-mods/adminnotes/files.rss");
+					VersionChecker version = new VersionChecker("http://dev.bukkit.org/server-mods/adminnotes/files.rss");
 					VersionChecker.versionInfo info = (version.versions.size() > 0) ? version.versions.get(0) : null;
 					if (info != null) {
 						String curVersion = getDescription().getVersion();
-						int compare = VersionChecker.compareVersions(curVersion, info.getTitle());
-						// plugin.info("curVersion: " + curVersion +", title: "
-						// +
-						// info.getTitle() + ", compare: " + compare);
-						if (compare < 0) {
+						if (VersionChecker.compareVersions(curVersion, info.getTitle()) < 0) {
 							Logger.warning("We're running v" + curVersion + ", v" + info.getTitle() + " is available");
 							Logger.warning(info.getLink());
 						}
