@@ -5,10 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.cyprias.AdminNotes.ChatUtils;
+import com.cyprias.AdminNotes.Logger;
 import com.cyprias.AdminNotes.Note;
 import com.cyprias.AdminNotes.Perm;
 import com.cyprias.AdminNotes.Plugin;
@@ -59,6 +61,24 @@ public class CreateCommand implements Command {
 			return true;
 		}
 		final String player = args[0];
+		
+		
+		
+		if (Config.getBoolean("properties.confirm-player-joined")){
+			OfflinePlayer oPlayer = Plugin.getInstance().getServer().getOfflinePlayer(player);
+			if (oPlayer.hasPlayedBefore() == false){
+				ChatUtils.send(sender, player + ChatColor.GRAY+ " has never been on the server, try again.");
+				return true;
+			}
+			
+		}
+		
+		
+		
+		
+		
+		
+		
 		final String text = ChatColor.stripColor(Plugin.getFinalArg(args, 1));
 
 		if (Config.getBoolean("properties.async-db-queries")){

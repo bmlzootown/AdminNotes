@@ -8,6 +8,7 @@ properties:
   date-format: "MM/dd/yy h:mm a"
   check-new-version: true
   async-db-queries: true
+  confirm-player-joined: true
 mysql:
   hostname: localhost
   username: root
