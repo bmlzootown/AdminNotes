@@ -15,6 +15,8 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.event.Listener;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
@@ -110,6 +112,8 @@ public class Plugin extends JavaPlugin {
 		}
 	}
 
+
+	
 	private void checkVersion() {
 		getServer().getScheduler().runTaskAsynchronously(instance, new Runnable() {
 			public void run() {
@@ -135,46 +139,40 @@ public class Plugin extends JavaPlugin {
 		});
 	}
 
+	private void autoNotePermission(String title){
+		Permission perm = new Permission("adminnotes.autonote."+title, PermissionDefault.getByName(Config.getString("properties.permission-default")));// PermissionDefault.getByName(Config.getString("properties.auto-note-permission"))
+		Bukkit.getPluginManager().addPermission(perm);
+	}
+	
+	
 	public static List<anCommand> anCommands = new ArrayList<anCommand>();
 	
 	public class anCommand {
 		public String regex;
 		public String player;
 		public String note;
-		public anCommand(String regex, String player, String note) {
+		public String title;
+		public anCommand(String title, String regex, String player, String note) {
+			this.title = title;
 			this.regex = regex;
 			this.player = player;
 			this.note = note;
+			
+			if (Config.getBoolean("properties.auto-note-permission"))
+				autoNotePermission(title);
 		}
 	}
 	
 	private void autonotes() throws FileNotFoundException, IOException, InvalidConfigurationException{
 		
 		YML autoNotes = new YML(instance.getResource("auto-notes.yml"),instance.getDataFolder(), "auto-notes.yml");
-		/*
-		autoNotes.createSection("commands");
-		ConfigurationSection commands = autoNotes.getConfigurationSection("commands");
-		
-		commands.createSection("jail1");
-		ConfigurationSection jail = commands.getConfigurationSection("jail1");
-		
-		jail.set("regex", "^\\/jail (.*) (.\\d) (\\w*) (.*)");
-		jail.set("replacement", "Jailed $2 minutes for $4");
-		jail.set("player", "$1");
-		
-		
-		autoNotes.save();
-		*
-		*/
-		
-		
 		
 		
 		ConfigurationSection commands = autoNotes.getConfigurationSection("commands");
 	
 		String regex, player, note;
 		for(String title : commands.getKeys(false)) {
-			// Logger.info("title: " + title);
+			Logger.info("title: " + title);
 			 
 			 regex = commands.getConfigurationSection(title).getString("regex");
 			 player = commands.getConfigurationSection(title).getString("player");
@@ -184,7 +182,10 @@ public class Plugin extends JavaPlugin {
 			 //Logger.info("player: " + player);
 			 //Logger.info("note: " + note);
 			 
-			 anCommands.add(new anCommand(regex, player, note));
+			 anCommands.add(new anCommand(title, regex, player, note));
+			 
+			// new Perm();
+			 
 			 
 		}
 		

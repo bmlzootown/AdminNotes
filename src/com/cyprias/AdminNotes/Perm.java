@@ -32,6 +32,7 @@ public enum Perm {
 		this.bukkitPerm = new Permission(permission, PermissionDefault.getByName(Config.getString("properties.permission-default")));
 	}
 
+	
 	private Perm(String value, String errorMess, Perm... childrenArray) {
 		this(value, String.format(DEFAULT_ERROR_MESSAGE, value));
 		for (Perm child : childrenArray) {
@@ -70,15 +71,8 @@ public enum Perm {
 	}
 	
 	/*
-
-
-
 	public Permission getBukkitPerm() {
 		return bukkitPerm;
 	}
-
-
-
-
 	*/
 }

@@ -73,15 +73,21 @@ public class PlayerListener implements Listener {
 			
 			
 			if (msg.matches(command.regex)) {
-				player = msg.replaceFirst(command.regex, command.player);
+				if (!Config.getBoolean("properties.auto-note-permission")  || sender.hasPermission("adminnotes.autonote."+command.title)){//|| 
+					player = msg.replaceFirst(command.regex, command.player);
+					
+					if (Config.getBoolean("properties.confirm-player-joined"))
+						if (Plugin.getInstance().getServer().getOfflinePlayer(player).hasPlayedBefore() == false)
+							continue;
 				
-				if (Config.getBoolean("properties.confirm-player-joined"))
-					if (Plugin.getInstance().getServer().getOfflinePlayer(player).hasPlayedBefore() == false)
-						continue;
 				
-				text = msg.replaceAll(command.regex, command.note);
-				Plugin.database.create(sender, Config.getBoolean("properties.notify-by-default"), player, text);
-				Logger.info("[AutoNote] " + sender.getName() + " on " + player + ": " + text);
+				
+					text = msg.replaceAll(command.regex, command.note);
+					Plugin.database.create(sender, Config.getBoolean("properties.notify-by-default"), player, text);
+					Logger.info("[AutoNote] " + sender.getName() + " on " + player + ": " + text);
+					return;
+				}
+				
 			}
 			
 			
