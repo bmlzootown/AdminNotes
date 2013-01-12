@@ -1,0 +1,45 @@
+commands:
+  jail1:
+    regex: ^\/jail (\w*) (.\d) (\w*) (.*)
+    note: Jailed $2 minutes for $4.
+    player: $1
+  jail2:
+    regex: ^\/jail (\w*) (.\d)
+    note: Jailed $2 minutes.
+    player: $1
+  jail3:
+    regex: ^\/jail (\w*)
+    note: Jailed.
+    player: $1
+  ban1:
+    regex: ^\/ban (\w*) (.*)
+    note: "Banned: $2."
+    player: $1
+  ban2:
+    regex: ^\/ban (\w*)
+    note: "Banned."
+    player: $1
+  tempban1:
+    regex: ^\/tempban (\w*) (.\d)
+    note: Banned $2 minutes.
+    player: $1
+  tempban2:
+    regex: ^\/tempban (\w*) (.*)
+    note: Banned $2.
+    player: $1
+  setrank:
+    regex: ^\/setrank (\w*) (\w*)
+    note: Rank set to $2.
+    player: $1
+  mute:
+    regex: ^\/mute (\w*)
+    note: (un)muted.
+    player: $1
+  kick1:
+    regex: ^\/kick (\w*) (.*)
+    note: Kicked for $2.
+    player: $1
+  kick2:
+    regex: ^\/kick (\w*)
+    note: Kicked.
+    player: $1
