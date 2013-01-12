@@ -88,16 +88,10 @@ public class Plugin extends JavaPlugin {
 			checkVersion();
 
 		try {
-			autonotes();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			loadAutoNotes();
+		} catch (FileNotFoundException e) {e.printStackTrace();
+		} catch (IOException e) {e.printStackTrace();
+		} catch (InvalidConfigurationException e) {e.printStackTrace();
 		}
 		
 		Logger.info("enabled.");
@@ -162,12 +156,9 @@ public class Plugin extends JavaPlugin {
 		}
 	}
 	
-	private void autonotes() throws FileNotFoundException, IOException, InvalidConfigurationException{
-		
-		YML autoNotes = new YML(instance.getResource("auto-notes.yml"),instance.getDataFolder(), "auto-notes.yml");
-		
-		
-		ConfigurationSection commands = autoNotes.getConfigurationSection("commands");
+	private void loadAutoNotes() throws FileNotFoundException, IOException, InvalidConfigurationException{
+		YML loadAutoNotes = new YML(instance.getResource("auto-notes.yml"),instance.getDataFolder(), "auto-notes.yml");
+		ConfigurationSection commands = loadAutoNotes.getConfigurationSection("commands");
 	
 		String regex, player, note;
 		for(String title : commands.getKeys(false)) {
@@ -177,20 +168,8 @@ public class Plugin extends JavaPlugin {
 			 player = commands.getConfigurationSection(title).getString("player");
 			 note = commands.getConfigurationSection(title).getString("note");
 			
-			 //Logger.info("regex: " + regex);
-			 //Logger.info("player: " + player);
-			 //Logger.info("note: " + note);
-			 
 			 anCommands.add(new anCommand(title, regex, player, note));
-			 
-			// new Perm();
-			 
-			 
 		}
-		
-		
-		
-		
 	}
 	
 	
