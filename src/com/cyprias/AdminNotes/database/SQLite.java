@@ -18,7 +18,6 @@ import com.cyprias.AdminNotes.Note;
 import com.cyprias.AdminNotes.Plugin;
 import com.cyprias.AdminNotes.SearchParser;
 import com.cyprias.AdminNotes.configuration.Config;
-import com.cyprias.AdminNotes.database.MySQL.queryReturn;
 
 public class SQLite implements Database {
 	private static String sqlDB;

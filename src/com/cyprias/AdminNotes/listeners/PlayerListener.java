@@ -1,13 +1,8 @@
 package com.cyprias.AdminNotes.listeners;
 
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

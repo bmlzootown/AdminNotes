@@ -5,12 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.cyprias.AdminNotes.ChatUtils;
-import com.cyprias.AdminNotes.Logger;
 import com.cyprias.AdminNotes.Note;
 import com.cyprias.AdminNotes.Perm;
 import com.cyprias.AdminNotes.Plugin;

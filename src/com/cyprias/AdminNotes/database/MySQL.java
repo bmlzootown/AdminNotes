@@ -16,7 +16,6 @@ import com.cyprias.AdminNotes.Note;
 import com.cyprias.AdminNotes.Plugin;
 import com.cyprias.AdminNotes.SearchParser;
 import com.cyprias.AdminNotes.configuration.Config;
-import com.cyprias.AdminNotes.database.SQLite.queryReturn;
 
 public class MySQL implements Database {
 

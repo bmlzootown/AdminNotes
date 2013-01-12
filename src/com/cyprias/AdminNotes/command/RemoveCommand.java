@@ -1,7 +1,6 @@
 package com.cyprias.AdminNotes.command;
 
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.bukkit.ChatColor;
