@@ -141,6 +141,7 @@ public class Plugin extends JavaPlugin {
 
 	private void autoNotePermission(String title){
 		Permission perm = new Permission("adminnotes.autonote."+title, PermissionDefault.getByName(Config.getString("properties.permission-default")));// PermissionDefault.getByName(Config.getString("properties.auto-note-permission"))
+		perm.addParent(Perm.AUTO_NOTE.getPermission(), true);
 		Bukkit.getPluginManager().addPermission(perm);
 	}
 	

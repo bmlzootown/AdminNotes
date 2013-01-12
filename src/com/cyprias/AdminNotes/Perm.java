@@ -19,6 +19,7 @@ public enum Perm {
 	NOTIFY("adminnotes.notify", "You do not have permissiont to toggle notify."),
 	SEARCH("adminnotes.search", "You do not have permission to search notes."),
 	REMOVE("adminnotes.remove", "You do not have permission remove notes."),
+	AUTO_NOTE("adminnotes.autonote.*"),
 	PARENT_MOD("adminnotes.mod", LIST, CREATE_NOTIFIED, INFO, LOGIN_NOTIFIED, SEARCH),
 	PARENT_ADMIN("adminnotes.admin", PARENT_MOD, CREATE, REMOVE, NOTIFY);
 
