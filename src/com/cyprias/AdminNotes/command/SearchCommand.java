@@ -23,6 +23,12 @@ public class SearchCommand implements Command {
 	private void DBQuery(CommandSender sender, SearchParser parser){
 		try {
 			List<Note> notes = Plugin.database.search(parser);
+			
+			if (notes.size() == 0){
+				ChatUtils.send(sender, "No results for " +ChatColor.WHITE + parser.searchString);
+				return;
+			}
+			
 			Note note;
 			for (int i=0; i<notes.size(); i++){
 				note = notes.get(i);

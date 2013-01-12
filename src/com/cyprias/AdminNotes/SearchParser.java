@@ -11,16 +11,15 @@ public class SearchParser {
 	public List<String> writers = new ArrayList<String>();
 	public List<String> keywords = new ArrayList<String>();
 
-	public String[] filters = null;
-	public String dateFrom = null;
-	public String dateTo = null;
-
+	public String searchString;
 	public SearchParser(CommandSender player, String[] args) throws IllegalArgumentException {
 		this.player = player;
 
 		String lastParam = "";
 		boolean paramSet = false;
 
+		searchString = Plugin.getFinalArg(args, 0);
+		
 		String arg;
 		for (int i = 0; i < args.length; i++) {
 			arg = args[i];
