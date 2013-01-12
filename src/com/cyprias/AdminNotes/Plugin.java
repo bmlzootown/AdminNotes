@@ -1,13 +1,19 @@
 package com.cyprias.AdminNotes;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,6 +28,7 @@ import com.cyprias.AdminNotes.command.NotifyCommand;
 import com.cyprias.AdminNotes.command.RemoveCommand;
 import com.cyprias.AdminNotes.command.SearchCommand;
 import com.cyprias.AdminNotes.configuration.Config;
+import com.cyprias.AdminNotes.configuration.YML;
 import com.cyprias.AdminNotes.database.Database;
 import com.cyprias.AdminNotes.database.MySQL;
 import com.cyprias.AdminNotes.database.SQLite;
@@ -80,6 +87,19 @@ public class Plugin extends JavaPlugin {
 		if (Config.getBoolean("properties.check-new-version"))
 			checkVersion();
 
+		try {
+			autonotes();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		Logger.info("enabled.");
 	}
 
@@ -115,6 +135,66 @@ public class Plugin extends JavaPlugin {
 		});
 	}
 
+	public static List<anCommand> anCommands = new ArrayList<anCommand>();
+	
+	public class anCommand {
+		public String regex;
+		public String player;
+		public String note;
+		public anCommand(String regex, String player, String note) {
+			this.regex = regex;
+			this.player = player;
+			this.note = note;
+		}
+	}
+	
+	private void autonotes() throws FileNotFoundException, IOException, InvalidConfigurationException{
+		
+		YML autoNotes = new YML(instance.getResource("auto-notes.yml"),instance.getDataFolder(), "auto-notes.yml");
+		/*
+		autoNotes.createSection("commands");
+		ConfigurationSection commands = autoNotes.getConfigurationSection("commands");
+		
+		commands.createSection("jail1");
+		ConfigurationSection jail = commands.getConfigurationSection("jail1");
+		
+		jail.set("regex", "^\\/jail (.*) (.\\d) (\\w*) (.*)");
+		jail.set("replacement", "Jailed $2 minutes for $4");
+		jail.set("player", "$1");
+		
+		
+		autoNotes.save();
+		*
+		*/
+		
+		
+		
+		
+		ConfigurationSection commands = autoNotes.getConfigurationSection("commands");
+	
+		String regex, player, note;
+		for(String title : commands.getKeys(false)) {
+			// Logger.info("title: " + title);
+			 
+			 regex = commands.getConfigurationSection(title).getString("regex");
+			 player = commands.getConfigurationSection(title).getString("player");
+			 note = commands.getConfigurationSection(title).getString("note");
+			
+			 //Logger.info("regex: " + regex);
+			 //Logger.info("player: " + player);
+			 //Logger.info("note: " + note);
+			 
+			 anCommands.add(new anCommand(regex, player, note));
+			 
+		}
+		
+		
+		
+		
+	}
+	
+	
+	
 	private void registerListeners(Listener... listeners) {
 		PluginManager manager = getServer().getPluginManager();
 
