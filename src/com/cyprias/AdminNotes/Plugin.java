@@ -25,6 +25,7 @@ import com.cyprias.AdminNotes.command.CreateCommand;
 import com.cyprias.AdminNotes.command.InfoCommand;
 import com.cyprias.AdminNotes.command.ListCommand;
 import com.cyprias.AdminNotes.command.NotifyCommand;
+import com.cyprias.AdminNotes.command.ReloadCommand;
 import com.cyprias.AdminNotes.command.RemoveCommand;
 import com.cyprias.AdminNotes.command.SearchCommand;
 import com.cyprias.AdminNotes.configuration.Config;
@@ -35,20 +36,15 @@ import com.cyprias.AdminNotes.database.SQLite;
 import com.cyprias.AdminNotes.listeners.PlayerListener;
 
 public class Plugin extends JavaPlugin {
-	// static PluginDescriptionFile description;
 	private static Plugin instance = null;
 
-	public void onLoad() {
-		// description = getDescription();
-	}
+	//public void onLoad() {}
 
 	public static Database database;
 
 	public void onEnable() {
 		instance = this;
 
-		// File dataFolder = getDataFolder();
-		// configFile = new File(dataFolder, "config.yml");
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 
@@ -74,7 +70,7 @@ public class Plugin extends JavaPlugin {
 
 		CommandManager cm = new CommandManager().registerCommand("create", new CreateCommand()).registerCommand("info", new InfoCommand())
 			.registerCommand("list", new ListCommand()).registerCommand("notify", new NotifyCommand()).registerCommand("search", new SearchCommand())
-			.registerCommand("remove", new RemoveCommand());
+			.registerCommand("remove", new RemoveCommand()).registerCommand("reload", new ReloadCommand());
 
 		this.getCommand("notes").setExecutor(cm);
 
@@ -131,6 +127,7 @@ public class Plugin extends JavaPlugin {
 		});
 	}
 
+	//anPermissions
 	private void autoNotePermission(String title){
 		Permission perm = new Permission("adminnotes.autonote."+title, PermissionDefault.getByName(Config.getString("properties.permission-default")));// PermissionDefault.getByName(Config.getString("properties.auto-note-permission"))
 		perm.addParent(Perm.AUTO_NOTE.getPermission(), true);
@@ -157,12 +154,14 @@ public class Plugin extends JavaPlugin {
 	}
 	
 	private void loadAutoNotes() throws FileNotFoundException, IOException, InvalidConfigurationException{
+		anCommands.clear();
+		
 		YML loadAutoNotes = new YML(instance.getResource("auto-notes.yml"),instance.getDataFolder(), "auto-notes.yml");
 		ConfigurationSection commands = loadAutoNotes.getConfigurationSection("commands");
 	
 		String regex, player, note;
 		for(String title : commands.getKeys(false)) {
-			Logger.info("title: " + title);
+		//	Logger.info("title: " + title);
 			 
 			 regex = commands.getConfigurationSection(title).getString("regex");
 			 player = commands.getConfigurationSection(title).getString("player");
@@ -183,8 +182,26 @@ public class Plugin extends JavaPlugin {
 	}
 
 	public void onDisable() {
-		Logger.info("disabled.");
+		for (int i=0;i<anCommands.size();i++){
+			Bukkit.getPluginManager().removePermission("adminnotes.autonote."+anCommands.get(i).title);
+		}
+		
+		PluginManager pm = Bukkit.getPluginManager();
+		for (Perm permission : Perm.values()) {
+			// permission.loadPermission(pm);
+			permission.unloadPermission(pm);
+		}
+
+		CommandManager.unregisterCommands();
+		this.getCommand("notes").setExecutor(null);
+		
+		
+		instance.getServer().getScheduler().cancelAllTasks();
+		
+		PlayerListener.unregisterEvents(instance);
+
 		instance = null;
+		Logger.info("disabled.");
 	}
 
 	public static void reload() {

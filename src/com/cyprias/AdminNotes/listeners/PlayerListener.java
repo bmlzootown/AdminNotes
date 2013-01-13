@@ -8,8 +8,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import com.cyprias.AdminNotes.ChatUtils;
 import com.cyprias.AdminNotes.Logger;
@@ -21,6 +23,10 @@ import com.cyprias.AdminNotes.configuration.Config;
 
 public class PlayerListener implements Listener {
 
+	static public void unregisterEvents(JavaPlugin instance){
+		PlayerCommandPreprocessEvent.getHandlerList().unregister(instance);
+	}
+	
 	private void loginNotifyQuery(Player player) throws SQLException {
 		List<Note> notes = Plugin.database.getPlayerNotifications(player.getName());
 		Note note;

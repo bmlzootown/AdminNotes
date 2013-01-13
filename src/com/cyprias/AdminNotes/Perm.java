@@ -20,8 +20,9 @@ public enum Perm {
 	SEARCH("adminnotes.search", "You do not have permission to search notes."),
 	REMOVE("adminnotes.remove", "You do not have permission remove notes."),
 	AUTO_NOTE("adminnotes.autonote.*"),
+	RELOAD("adminnotes.reload"),
 	PARENT_MOD("adminnotes.mod", LIST, CREATE_NOTIFIED, INFO, LOGIN_NOTIFIED, SEARCH),
-	PARENT_ADMIN("adminnotes.admin", PARENT_MOD, CREATE, REMOVE, NOTIFY);
+	PARENT_ADMIN("adminnotes.admin", PARENT_MOD, CREATE, REMOVE, NOTIFY, RELOAD);
 
 	private Perm(String value, Perm... childrenArray) {
 		this(value, String.format(DEFAULT_ERROR_MESSAGE, value), childrenArray);
@@ -70,7 +71,9 @@ public enum Perm {
 	public String getErrorMessage() {
 		return errorMessage;
 	}
-	
+	public void unloadPermission(PluginManager pm) {
+		pm.removePermission(bukkitPerm);
+	}
 	/*
 	public Permission getBukkitPerm() {
 		return bukkitPerm;
