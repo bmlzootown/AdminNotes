@@ -1,45 +1,81 @@
 commands:
   jail1:
-    regex: ^\/jail (\w*) (.\d) (\w*) (.*)
-    note: Jailed $2 minutes for $4.
+    regex: ^\/(?i)jail (\w*) (.\d) (\w*) (.*)
+    note: Jailed $2 minutes by <commander> for $4.
     player: $1
   jail2:
-    regex: ^\/jail (\w*) (.\d)
-    note: Jailed $2 minutes.
+    regex: ^\/(?i)jail (\w*) (.\d)
+    note: Jailed $2 minutes by <commander>.
     player: $1
   jail3:
-    regex: ^\/jail (\w*)
-    note: Jailed.
+    regex: ^\/(?i)jail (\w*)
+    note: Jailed by <commander>.
     player: $1
   ban1:
-    regex: ^\/ban (\w*) (.*)
-    note: "Banned: $2."
+    regex: ^\/(?i)ban (\w*) (.*)
+    note: "Banned by <commander>: $2."
     player: $1
   ban2:
-    regex: ^\/ban (\w*)
-    note: "Banned."
+    regex: ^\/(?i)ban (\w*)
+    note: "Banned by <commander>."
     player: $1
   tempban1:
-    regex: ^\/tempban (\w*) (.\d)
-    note: Banned $2 minutes.
+    regex: ^\/(?i)tempban (\w*) (.\d)
+    note: Banned $2 minutes by <commander>.
     player: $1
   tempban2:
-    regex: ^\/tempban (\w*) (.*)
-    note: Banned $2.
+    regex: ^\/(?i)tempban (\w*) (.*)
+    note: Banned $2 by <commander>.
     player: $1
   setrank:
-    regex: ^\/setrank (\w*) (\w*)
-    note: Rank set to $2.
+    regex: ^\/(?i)setrank (\w*) (\w*)
+    note: Rank set to $2 by <commander>.
     player: $1
   mute:
-    regex: ^\/mute (\w*)
-    note: (un)muted.
+    regex: ^\/(?i)mute (\w*)
+    note: (un)muted by <commander>.
     player: $1
   kick1:
-    regex: ^\/kick (\w*) (.*)
-    note: Kicked for $2.
+    regex: ^\/(?i)kick (\w*) (.*)
+    note: Kicked by <commander> for $2.
     player: $1
   kick2:
-    regex: ^\/kick (\w*)
-    note: Kicked.
+    regex: ^\/(?i)kick (\w*)
+    note: Kicked by <commander>.
     player: $1
+  hepreview1:
+    regex: ^\/(?i)he rollback (.*) p:(\w*) (.*)
+    note: Rollback ($1, $3) by <commander> at <location>.
+    player: $2
+  hepreview2:
+    regex: ^\/(?i)he rollback p:(\w*) (.*)
+    note: Rollback ($2) by <commander> at <location>.
+    player: $1
+  hepreview3:
+    regex: ^\/(?i)he rollback (.*) p:(\w*)
+    note: Rollback ($1) by <commander> at <location>.
+    player: $2
+  hawkpreview1:
+    regex: ^\/(?i)hawk rollback (.*) p:(\w*) (.*)
+    note: Rollback ($1, $3) by <commander> at <location>.
+    player: $2
+  hepreview2:
+    regex: ^\/(?i)hawk rollback p:(\w*) (.*)
+    note: Rollback ($2) by <commander> at <location>.
+    player: $1
+  hepreview3:
+    regex: ^\/(?i)hawk rollback (.*) p:(\w*)
+    note: Rollback ($1) by <commander> at <location>.
+    player: $2
+  hawkeyepreview1:
+    regex: ^\/(?i)hawkeye rollback (.*) p:(\w*) (.*)
+    note: Rollback ($1, $3) by <commander> at <location>.
+    player: $2
+  hepreview2:
+    regex: ^\/(?i)hawkeye rollback p:(\w*) (.*)
+    note: Rollback ($2) by <commander> at <location>.
+    player: $1
+  hepreview3:
+    regex: ^\/(?i)hawkeye rollback (.*) p:(\w*)
+    note: Rollback ($1) by <commander> at <location>.
+    player: $2

@@ -80,10 +80,14 @@ public class PlayerListener implements Listener {
 					if (Config.getBoolean("properties.confirm-player-joined"))
 						if (Plugin.getInstance().getServer().getOfflinePlayer(player).hasPlayedBefore() == false)
 							continue;
-				
-				
+
 				
 					text = msg.replaceAll(command.regex, command.note);
+					
+					text = text.replace("<location>", event.getPlayer().getWorld().getName() + "|" + event.getPlayer().getLocation().getBlockX() + " " + event.getPlayer().getLocation().getBlockY());
+					
+					text = text.replace("<commander>", sender.getName());
+					
 					Plugin.database.create(sender, Config.getBoolean("properties.notify-by-default"), player, text);
 					Logger.info("[AutoNote] " + sender.getName() + " on " + player + ": " + text);
 					return;
