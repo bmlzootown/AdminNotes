@@ -138,18 +138,26 @@ public class Plugin extends JavaPlugin {
 	public static List<anCommand> anCommands = new ArrayList<anCommand>();
 	
 	public class anCommand {
-		public String regex;
+		public String[]  regex;
 		public String player;
 		public String note;
 		public String title;
-		public anCommand(String title, String regex, String player, String note) {
+		public Boolean create = true;
+		public anCommand(String title, String[] regex, String player, String note) {
 			this.title = title;
 			this.regex = regex;
 			this.player = player;
 			this.note = note;
 			
+			//for (int i=0; i<regex.length; i++){
+			//	Logger.info(title + " regex " + i + ": " + regex[i]);
+			//}
+			
 			if (Config.getBoolean("properties.auto-note-permission"))
 				autoNotePermission(title);
+		}
+		public void setCreate(Boolean create){
+			this.create = create;
 		}
 	}
 	
@@ -159,15 +167,26 @@ public class Plugin extends JavaPlugin {
 		YML loadAutoNotes = new YML(instance.getResource("auto-notes.yml"),instance.getDataFolder(), "auto-notes.yml");
 		ConfigurationSection commands = loadAutoNotes.getConfigurationSection("commands");
 	
-		String regex, player, note;
+		String player, note;
+		String[] regex;
+		anCommand autonote;
 		for(String title : commands.getKeys(false)) {
 		//	Logger.info("title: " + title);
-			 
-			 regex = commands.getConfigurationSection(title).getString("regex");
+			
+			
+			 regex = commands.getConfigurationSection(title).getString("regex").split(Config.getString("properties.line-separator") );
 			 player = commands.getConfigurationSection(title).getString("player");
 			 note = commands.getConfigurationSection(title).getString("note");
 			
-			 anCommands.add(new anCommand(title, regex, player, note));
+			 autonote = new anCommand(title, regex, player, note);
+			 
+			if (commands.getConfigurationSection(title).contains("create"))
+				autonote.setCreate(commands.getConfigurationSection(title).getBoolean("create"));
+			
+			 
+			 anCommands.add(autonote);
+			 
+			 
 		}
 	}
 	

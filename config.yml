@@ -4,12 +4,13 @@ properties:
   db-type: sqlite
   permission-default: op
   notify-by-default: false
-  notes-per-page: 5
+  notes-per-page: 10
   date-format: "MM/dd/yy h:mm a"
   check-new-version: true
   async-db-queries: true
   confirm-player-joined: true
   auto-note-permission: false
+  debug-messages: false
 mysql:
   hostname: localhost
   username: root
