@@ -32,7 +32,7 @@ public class SearchCommand implements Command {
 			Note note;
 			for (int i=0; i<notes.size(); i++){
 				note = notes.get(i);
-				ChatUtils.send(sender, String.format((ChatColor.GRAY+"[%s"+ChatColor.GRAY+"] "+ChatColor.WHITE+"%s"+ChatColor.GRAY+": "+ChatColor.WHITE+"%s"), note.getColouredId(), note.getPlayer(), note.getText()));
+				ChatUtils.send(sender, String.format((ChatColor.GRAY+"[%s"+ChatColor.GRAY+"] "+ChatColor.WHITE+"%s"+ChatColor.GRAY+": "+ChatColor.WHITE+"%s"), note.getColouredId(), note.getColouredPlayer(), note.getText()));
 			}
 		} catch (SQLException e) {
 			ChatUtils.error(sender, e.getMessage());

@@ -39,7 +39,7 @@ public class PlayerListener implements Listener {
 			ChatUtils.broadcast(
 				Perm.LOGIN_NOTIFIED,
 				String.format((ChatColor.GRAY + "[%s" + ChatColor.GRAY + "] " + ChatColor.WHITE + "%s" + ChatColor.GRAY + ": " + ChatColor.WHITE + "%s"),
-					note.getColouredId(), note.getPlayer(), note.getText()));
+					note.getColouredId(), note.getColouredPlayer(), note.getText()));
 		}
 	}
 

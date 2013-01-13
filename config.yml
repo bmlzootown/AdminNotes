@@ -11,6 +11,8 @@ properties:
   confirm-player-joined: true
   auto-note-permission: false
   debug-messages: false
+  player-colour: BLUE
+  notify-colour: RED
 mysql:
   hostname: localhost
   username: root

@@ -4,6 +4,8 @@ import java.sql.SQLException;
 
 import org.bukkit.ChatColor;
 
+import com.cyprias.AdminNotes.configuration.Config;
+
 public class Note {
 
 	public Note(int int1, int int2, boolean boolean1, String string, String string2, String string3) {
@@ -23,10 +25,7 @@ public class Note {
 	}
 
 	public String getColouredId(){
-		if (this.notify)
-			return ChatColor.GOLD + String.valueOf(this.id)+ChatColor.RESET;
-
-		return ChatColor.WHITE + String.valueOf(this.id)+ChatColor.RESET;
+		return (this.notify) ? ChatColor.valueOf(Config.getString("properties.notify-colour")) + String.valueOf(this.id)+ChatColor.RESET : ChatColor.WHITE + String.valueOf(this.id)+ChatColor.RESET;
 	}
 	
 	public int getTime(){
@@ -43,6 +42,10 @@ public class Note {
 	
 	public String getPlayer(){
 		return this.player;
+	}
+	
+	public String getColouredPlayer(){
+		return ChatColor.valueOf(Config.getString("properties.player-colour")) + this.player + ChatColor.RESET;
 	}
 	
 	public String getText(){

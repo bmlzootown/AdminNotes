@@ -27,7 +27,7 @@ public class RemoveCommand implements Command {
 				ChatColor G = ChatColor.GRAY;
 				ChatColor W = ChatColor.WHITE;
 				
-				ChatUtils.send(sender, G+String.format("Removed #%s by %s on %s: %s", W+String.valueOf(id)+G, W+note.getWriter()+G , W+note.getPlayer()+G, W+note.getText()+G));
+				ChatUtils.send(sender, G+String.format("Removed #%s by %s on %s: %s", W+String.valueOf(id)+G, W+note.getWriter()+G , W+note.getColouredPlayer()+G, W+note.getText()+G));
 				note.remove();
 				
 			}else{

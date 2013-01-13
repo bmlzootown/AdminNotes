@@ -61,7 +61,7 @@ commands:
     player: $2
   hepreview1:
     regex: ^\/(?i)(he|hawk|hawkeye) preview (.*) p:(\w*) (.*)<newline>^\/(?i)(he|hawk|hawkeye) preview apply
-    note: Applied preview ($2, $4)by <commander> at <location>.
+    note: Applied preview ($2, $4) by <commander> at <location>.
     player: $3
   hepreview2:
     regex: ^\/(?i)(he|hawk|hawkeye) preview p:(\w*) (.*)<newline>^\/(?i)(he|hawk|hawkeye) preview apply
