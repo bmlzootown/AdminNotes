@@ -29,6 +29,7 @@ public class PlayerListener implements Listener {
 
 	static public void unregisterEvents(JavaPlugin instance) {
 		PlayerCommandPreprocessEvent.getHandlerList().unregister(instance);
+		PlayerJoinEvent.getHandlerList().unregister(instance);
 	}
 
 	private void loginNotifyQuery(Player player) throws SQLException {
