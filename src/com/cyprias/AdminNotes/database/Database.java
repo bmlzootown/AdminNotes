@@ -31,4 +31,6 @@ public interface Database {
 	
 	Note last() throws SQLException;
 	
+	Boolean setText(int id, String text) throws SQLException;
+	
 }

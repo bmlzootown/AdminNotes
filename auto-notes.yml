@@ -1,77 +1,77 @@
 commands:
   jail1:
     regex: ^\/(?i)jail (\w*) (.\d) (\w*) (.*)
-    note: Jailed $2 minutes by <commander> for $4.
+    note: Jailed $2 minutes for $4.
     player: $1
   jail2:
     regex: ^\/(?i)jail (\w*) (.\d)
-    note: Jailed $2 minutes by <commander>.
+    note: Jailed $2 minutes.
     player: $1
   jail3:
     regex: ^\/(?i)jail (\w*)
-    note: Jailed by <commander>.
+    note:  Jailed.
     player: $1
   ban1:
     regex: ^\/(?i)ban (\w*) (.*)
-    note: "Banned by <commander>: $2."
+    note: "Banned: $2."
     player: $1
   ban2:
     regex: ^\/(?i)ban (\w*)
-    note: "Banned by <commander>."
+    note: "Banned."
     player: $1
   tempban1:
     regex: ^\/(?i)tempban (\w*) (.\d)
-    note: Banned $2 minutes by <commander>.
+    note: Banned $2 minutes.
     player: $1
   tempban2:
     regex: ^\/(?i)tempban (\w*) (.*)
-    note: Banned $2 by <commander>.
+    note: Banned $2.
     player: $1
   setrank:
     regex: ^\/(?i)setrank (\w*) (\w*)
-    note: Rank set to $2 by <commander>.
+    note: Rank set to $2.
     player: $1
   mute:
     regex: ^\/(?i)mute (\w*)
-    note: (un)muted by <commander>.
+    note: (un)muted.
     player: $1
   kick1:
     regex: ^\/(?i)kick (\w*) (.*)
-    note: Kicked by <commander> for $2.
+    note: Kicked for $2.
     player: $1
   kick2:
     regex: ^\/(?i)kick (\w*)
-    note: Kicked by <commander>.
+    note: Kicked.
     player: $1
   herollback1:
     regex: ^\/(?i)(he|hawk|hawkeye) rollback (.*) p:(\w*) (.*)
-    note: Rollback ($2, $4) by <commander> at <location>.
+    note: <commander> rollback ($2, $4) at <location>.
     player: $3
   herollback2:
     regex: ^\/(?i)(he|hawk|hawkeye) rollback p:(\w*) (.*)
-    note: Rollback ($3) by <commander> at <location>.
+    note: <commander> rollback ($3) at <location>.
     player: $2
   herollback3:
     regex: ^\/(?i)(he|hawk|hawkeye) rollback (.*) p:(\w*)
-    note: Rollback ($2) by <commander> at <location>.
+    note: <commander> rollback ($2) at <location>.
     player: $3
   herollback4:
     regex: ^\/(?i)(he|hawk|hawkeye) rollback p:(\w*)
-    note: Full rollback by <commander> at <location>.
+    note: <commander> full rollback at <location>.
     player: $2
   hepreview1:
     regex: ^\/(?i)(he|hawk|hawkeye) preview (.*) p:(\w*) (.*)<newline>^\/(?i)(he|hawk|hawkeye) preview apply
-    note: Applied preview ($2, $4) by <commander> at <location>.
+    note: <commander> applied preview ($2, $4) at <location>.
     player: $3
   hepreview2:
     regex: ^\/(?i)(he|hawk|hawkeye) preview p:(\w*) (.*)<newline>^\/(?i)(he|hawk|hawkeye) preview apply
-    note: Applied preview ($3) by <commander> at <location>.
+    note: <commander> applied preview ($3) at <location>.
     player: $2
   hepreview3:
     regex: ^\/(?i)(he|hawk|hawkeye) preview (.*) p:(\w*)<newline>^\/(?i)(he|hawk|hawkeye) preview apply
-    note: Applied preview ($2) by <commander> at <location>.
+    note: <commander> applied preview ($2) at <location>.
     player: $3
   hepreview4:
     regex: ^\/(?i)(he|hawk|hawkeye) preview p:(\w*)<newline>^\/(?i)(he|hawk|hawkeye) preview apply
-    note: Applied full preview by <commander> at <location>.
+    note: <commander> applied full preview at <location>.
     player: $2

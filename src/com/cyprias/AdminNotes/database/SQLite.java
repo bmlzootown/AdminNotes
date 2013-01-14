@@ -276,4 +276,9 @@ public class SQLite implements Database {
 		return (succsess > 0) ? true : false;
 	}
 
+	public Boolean setText(int id, String text) throws SQLException {
+		int succsess = executeUpdate("UPDATE `"+notes_table+"` SET `text` = ? WHERE `id` = ?;", text, id);
+		return (succsess > 0) ? true : false;
+	}
+
 }

@@ -20,10 +20,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 import org.xml.sax.SAXException;
 
+import com.cyprias.AdminNotes.command.AppendCommand;
 import com.cyprias.AdminNotes.command.CommandManager;
 import com.cyprias.AdminNotes.command.CreateCommand;
 import com.cyprias.AdminNotes.command.InfoCommand;
 import com.cyprias.AdminNotes.command.ListCommand;
+import com.cyprias.AdminNotes.command.ModifyCommand;
 import com.cyprias.AdminNotes.command.NotifyCommand;
 import com.cyprias.AdminNotes.command.ReloadCommand;
 import com.cyprias.AdminNotes.command.RemoveCommand;
@@ -70,7 +72,7 @@ public class Plugin extends JavaPlugin {
 
 		CommandManager cm = new CommandManager().registerCommand("create", new CreateCommand()).registerCommand("info", new InfoCommand())
 			.registerCommand("list", new ListCommand()).registerCommand("notify", new NotifyCommand()).registerCommand("search", new SearchCommand())
-			.registerCommand("remove", new RemoveCommand()).registerCommand("reload", new ReloadCommand());
+			.registerCommand("remove", new RemoveCommand()).registerCommand("reload", new ReloadCommand()).registerCommand("append", new AppendCommand()).registerCommand("modify", new ModifyCommand());
 
 		this.getCommand("notes").setExecutor(cm);
 

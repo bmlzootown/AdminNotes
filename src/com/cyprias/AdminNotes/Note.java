@@ -52,6 +52,10 @@ public class Note {
 		return this.text;
 	}
 	
+	public Boolean setText(String text) throws SQLException{
+		return Plugin.database.setText(id, text);
+	}
+	
 	public Boolean remove() throws SQLException{
 		return Plugin.database.remove(id);
 	}

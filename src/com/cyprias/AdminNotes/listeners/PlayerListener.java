@@ -80,10 +80,13 @@ public class PlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) throws SQLException {
-		String msg = event.getMessage();
-		// String command = msg.split(" ")[0].replace("/", "");
-
 		CommandSender sender = (CommandSender) event.getPlayer();
+		
+		/*if (!Plugin.hasPermission(sender, Perm.CREATE)) {
+			return;
+		}*/
+		
+		String msg = event.getMessage();
 
 		anCommand command;
 		String player, text, regex, location;
