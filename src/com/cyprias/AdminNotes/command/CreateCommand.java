@@ -64,7 +64,9 @@ public class CreateCommand implements Command {
 		
 		if (Config.getBoolean("properties.confirm-player-joined")){
 			
-			if (Plugin.getInstance().getServer().getOfflinePlayer(player).hasPlayedBefore() == false){
+			
+			
+			if (Plugin.hasPlayedBefore(player) == false){
 				ChatUtils.send(sender, player + ChatColor.GRAY+ " has never been on the server, try again.");
 				return true;
 			}

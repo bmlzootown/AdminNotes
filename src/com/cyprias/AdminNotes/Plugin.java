@@ -8,6 +8,7 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -144,26 +145,19 @@ public class Plugin extends JavaPlugin {
 		public String player;
 		public String note;
 		public String title;
-		public Boolean create = true;
 		public Boolean notify;
-		public anCommand(String title, String[] regex, String player, String note) {
+		public anCommand(String title, String[] regex, String player, String note, Boolean notify) {
 			this.title = title;
 			this.regex = regex;
 			this.player = player;
 			this.note = note;
-			
+			this.notify = notify;
 			//for (int i=0; i<regex.length; i++){
 			//	Logger.info(title + " regex " + i + ": " + regex[i]);
 			//}
 			
 			if (Config.getBoolean("properties.auto-note-permission"))
 				autoNotePermission(title);
-		}
-		public void setCreate(Boolean create){
-			this.create = create;
-		}
-		public void setNotify(Boolean notify){
-			this.notify = notify;
 		}
 	}
 	
@@ -176,6 +170,7 @@ public class Plugin extends JavaPlugin {
 		String player, note;
 		String[] regex;
 		anCommand autonote;
+		Boolean notify;
 		for(String title : commands.getKeys(false)) {
 		//	Logger.info("title: " + title);
 			
@@ -183,17 +178,11 @@ public class Plugin extends JavaPlugin {
 			 regex = commands.getConfigurationSection(title).getString("regex").split(Config.getString("properties.line-separator") );
 			 player = commands.getConfigurationSection(title).getString("player");
 			 note = commands.getConfigurationSection(title).getString("note");
-			
-			 autonote = new anCommand(title, regex, player, note);
+			 notify = (commands.getConfigurationSection(title).contains("notify")) ? commands.getConfigurationSection(title).getBoolean("create"): Config.getBoolean("properties.notify-by-default");
 			 
-			if (commands.getConfigurationSection(title).contains("create"))
-				autonote.setCreate(commands.getConfigurationSection(title).getBoolean("create"));
-			
-			autonote.setNotify((commands.getConfigurationSection(title).contains("notify")) ? commands.getConfigurationSection(title).getBoolean("create"): Config.getBoolean("properties.notify-by-default"));
-			
-			// anCommands.add(autonote);
+			 autonote = new anCommand(title, regex, player, note, notify);
 			 
-			 
+			 anCommands.add(autonote);
 		}
 	}
 	
@@ -319,4 +308,14 @@ public class Plugin extends JavaPlugin {
 		return result;
 
 	}
+	public static Boolean hasPlayedBefore(String playerName){
+		if (instance.getServer().getPlayer(playerName).hasPlayedBefore())
+			return true;
+
+		if (instance.getServer().getOfflinePlayer(playerName).hasPlayedBefore())
+			return true;
+
+		return false;
+	}
+	
 }
