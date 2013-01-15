@@ -127,8 +127,10 @@ public class PlayerListener implements Listener {
 							text = text.replace("<commander>", sender.getName());
 						}
 						
+						
+						
 						if (r == (command.regex.length-1)) {
-							Plugin.database.create(sender, Config.getBoolean("properties.notify-by-default"), player, text);
+							Plugin.database.create(sender, command.notify, player, text);
 							Logger.info("[AutoNote] " + sender.getName() + " on " + player + ": " + text);
 
 							if (lastAutoNote.containsKey(sender))

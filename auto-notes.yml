@@ -15,10 +15,12 @@ commands:
     regex: ^\/(?i)ban (\w*) (.*)
     note: "Banned: $2."
     player: $1
+    notify: true
   ban2:
     regex: ^\/(?i)ban (\w*)
     note: "Banned."
     player: $1
+    notify: true
   tempban1:
     regex: ^\/(?i)tempban (\w*) (.\d)
     note: Banned $2 minutes.

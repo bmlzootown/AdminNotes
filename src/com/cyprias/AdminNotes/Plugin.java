@@ -145,6 +145,7 @@ public class Plugin extends JavaPlugin {
 		public String note;
 		public String title;
 		public Boolean create = true;
+		public Boolean notify;
 		public anCommand(String title, String[] regex, String player, String note) {
 			this.title = title;
 			this.regex = regex;
@@ -160,6 +161,9 @@ public class Plugin extends JavaPlugin {
 		}
 		public void setCreate(Boolean create){
 			this.create = create;
+		}
+		public void setNotify(Boolean notify){
+			this.notify = notify;
 		}
 	}
 	
@@ -185,8 +189,9 @@ public class Plugin extends JavaPlugin {
 			if (commands.getConfigurationSection(title).contains("create"))
 				autonote.setCreate(commands.getConfigurationSection(title).getBoolean("create"));
 			
-			 
-			 anCommands.add(autonote);
+			autonote.setNotify((commands.getConfigurationSection(title).contains("notify")) ? commands.getConfigurationSection(title).getBoolean("create"): Config.getBoolean("properties.notify-by-default"));
+			
+			// anCommands.add(autonote);
 			 
 			 
 		}
