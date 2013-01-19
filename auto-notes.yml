@@ -4,10 +4,14 @@ commands:
     note: Jailed $2 minutes for $4.
     player: $1
   jail2:
+    regex: ^\/(?i)jail (\w*) (.\d) (.*)
+    note: Jailed $2 minutes for $3.
+    player: $1
+  jail3:
     regex: ^\/(?i)jail (\w*) (.\d)
     note: Jailed $2 minutes.
     player: $1
-  jail3:
+  jail4:
     regex: ^\/(?i)jail (\w*)
     note:  Jailed.
     player: $1
