@@ -79,7 +79,7 @@ public class PlayerListener implements Listener {
 
 	private final static Map<CommandSender, AutoNote> lastAutoNote = new HashMap<CommandSender, AutoNote>();
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) throws SQLException {
 		CommandSender sender = (CommandSender) event.getPlayer();
 		

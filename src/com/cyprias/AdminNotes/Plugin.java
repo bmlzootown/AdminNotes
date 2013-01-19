@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -309,7 +310,8 @@ public class Plugin extends JavaPlugin {
 
 	}
 	public static Boolean hasPlayedBefore(String playerName){
-		if (instance.getServer().getPlayer(playerName).hasPlayedBefore())
+		Player player = instance.getServer().getPlayer(playerName);
+		if (player != null && player.hasPlayedBefore())
 			return true;
 
 		if (instance.getServer().getOfflinePlayer(playerName).hasPlayedBefore())
