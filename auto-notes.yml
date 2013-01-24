@@ -81,3 +81,7 @@ commands:
     regex: ^\/(?i)(he|hawk|hawkeye) preview p:(\w*)<newline>^\/(?i)(he|hawk|hawkeye) preview apply
     note: <commander> applied full preview at <location>.
     player: $2
+  nick1:
+    regex: ^\/(?i)nick (\w*)
+    note: Nickname set to $1.
+    player: $1
