@@ -82,6 +82,10 @@ commands:
     note: <commander> applied full preview at <location>.
     player: $2
   nick1:
-    regex: ^\/(?i)nick (\w*)
-    note: Nickname set to $1.
+    regex: ^\/(?i)nick (\w*) off.
+    note: Nickname removed.
+    player: $1
+  nick2:
+    regex: ^\/(?i)nick (\w*) (\w*)
+    note: Nickname set to $2.
     player: $1
