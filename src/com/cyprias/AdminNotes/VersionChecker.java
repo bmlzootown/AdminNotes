@@ -16,9 +16,15 @@ import org.xml.sax.SAXException;
 
 public class VersionChecker {
 	List<versionInfo> versions = new ArrayList<versionInfo>();
-	public VersionChecker(String curseRSS) throws SAXException, IOException, ParserConfigurationException {
+	public VersionChecker(String curseRSS) throws IOException, ParserConfigurationException {
 		URL url = new URL(curseRSS);
-		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(url.openConnection().getInputStream());
+		Document doc = null;
+		try {
+			doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(url.openConnection().getInputStream());
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		doc.getDocumentElement().normalize();
 		NodeList nodes = doc.getElementsByTagName("item");
 
