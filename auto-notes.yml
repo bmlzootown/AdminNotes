@@ -38,9 +38,9 @@ commands:
     note: Rank set to $2.
     player: $1
   mute:
-    regex: ^\/(?i)mute (\w*)
+    regex: ^\/(?i)(mute|mchatmute) (\w*)
     note: (un)muted.
-    player: $1
+    player: $2
   kick1:
     regex: ^\/(?i)kick (\w*) (.*)
     note: Kicked for $2.
@@ -88,4 +88,6 @@ commands:
   nick2:
     regex: ^\/(?i)nick (\w*) (\w*)
     note: Nickname set to $2.
-    player: $1
+  god1:
+    regex: ^\/(?i)god
+    note: Toggled godmode.
