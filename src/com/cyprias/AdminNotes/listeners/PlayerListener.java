@@ -91,6 +91,7 @@ public class PlayerListener implements Listener {
 
 		anCommand command;
 		String player, text, regex, location;
+		player = sender.getName();
 		for (int i = 0; i < Plugin.anCommands.size(); i++) {
 			command = Plugin.anCommands.get(i);
 
@@ -104,7 +105,12 @@ public class PlayerListener implements Listener {
 					if (!Config.getBoolean("properties.auto-note-permission") || sender.hasPermission("adminnotes.autonote." + command.title)) {// ||
 						
 						try{
-							player = lastAutoNote.containsKey(sender) ? lastAutoNote.get(sender).player : msg.replaceFirst(regex, command.player);
+							if (lastAutoNote.containsKey(sender)){
+								player =  lastAutoNote.get(sender).player;
+							}else
+								if (command.player != null)
+									player = msg.replaceFirst(regex, command.player);
+						
 						} catch (IndexOutOfBoundsException e) {
 							if (Config.getBoolean("properties.debug-messages"))
 								Logger.warning("Error getting player: " + e.getMessage());

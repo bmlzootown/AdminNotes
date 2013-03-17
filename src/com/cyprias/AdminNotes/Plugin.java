@@ -174,9 +174,10 @@ public class Plugin extends JavaPlugin {
 		//	Logger.info("title: " + title);
 			
 			
-			 regex = commands.getConfigurationSection(title).getString("regex").split(Config.getString("properties.line-separator") );
-			 player = commands.getConfigurationSection(title).getString("player");
-			 note = commands.getConfigurationSection(title).getString("note");
+			
+			 regex = commands.getConfigurationSection(title).contains("regex") ? commands.getConfigurationSection(title).getString("regex").split(Config.getString("properties.line-separator")) : null;
+			 player = commands.getConfigurationSection(title).contains("player") ?  commands.getConfigurationSection(title).getString("player") : null;
+			 note = commands.getConfigurationSection(title).contains("note") ? commands.getConfigurationSection(title).getString("note") : null;
 			 notify = (commands.getConfigurationSection(title).contains("notify")) ? commands.getConfigurationSection(title).getBoolean("create"): Config.getBoolean("properties.notify-by-default");
 			 
 			 autonote = new anCommand(title, regex, player, note, notify);
