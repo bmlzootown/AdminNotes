@@ -10,20 +10,20 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 /* Pulls version info from the project's files page on Curse. */
 
 public class VersionChecker {
-	List<versionInfo> versions = new ArrayList<versionInfo>();
+	public List<versionInfo> versions = new ArrayList<versionInfo>();
 	public VersionChecker(String curseRSS) throws IOException, ParserConfigurationException {
 		URL url = new URL(curseRSS);
 		Document doc = null;
 		try {
 			doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(url.openConnection().getInputStream());
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			//Socket error, forgo giving an error. 
+			Logger.warning("Error checking version update");
+			return;
 		}
 		doc.getDocumentElement().normalize();
 		NodeList nodes = doc.getElementsByTagName("item");

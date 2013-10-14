@@ -8,7 +8,6 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -20,8 +19,6 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
-import org.xml.sax.SAXException;
-
 import com.cyprias.AdminNotes.command.AppendCommand;
 import com.cyprias.AdminNotes.command.CommandManager;
 import com.cyprias.AdminNotes.command.CreateCommand;
@@ -105,8 +102,8 @@ public class Plugin extends JavaPlugin {
 	}
 
 
-	
 	private void checkVersion() {
+		// Run our version checker in async thread, so not to lockup if timeout.
 		getServer().getScheduler().runTaskAsynchronously(instance, new Runnable() {
 			public void run() {
 				try {
@@ -128,7 +125,7 @@ public class Plugin extends JavaPlugin {
 			}
 		});
 	}
-
+	
 	//anPermissions
 	private void autoNotePermission(String title){
 		Permission perm = new Permission("adminnotes.autonote."+title, PermissionDefault.getByName(Config.getString("properties.permission-default")));// PermissionDefault.getByName(Config.getString("properties.auto-note-permission"))
