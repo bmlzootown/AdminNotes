@@ -75,11 +75,12 @@ public class Plugin extends JavaPlugin {
 
 		this.getCommand("notes").setExecutor(cm);
 
-		try {
-			Metrics metrics = new Metrics(this);
-			metrics.start();
-		} catch (IOException e) {
-		}
+		if (Config.getBoolean("properties.use-metrics"))
+			try {
+				Metrics metrics = new Metrics(this);
+				metrics.start();
+			} catch (IOException e) {
+			}
 
 		if (Config.getBoolean("properties.check-new-version"))
 			checkVersion();

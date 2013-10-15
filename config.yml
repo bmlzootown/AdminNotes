@@ -13,6 +13,10 @@ properties:
   debug-messages: false
   player-colour: BLUE
   notify-colour: RED
+  
+  # Let mcstats.org know the plugin's running, so the developer knows how popular the plugin is.
+  use-metrics: true
+  
 mysql:
   hostname: localhost
   username: root
