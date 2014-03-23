@@ -1,8 +1,11 @@
 package com.cyprias.AdminNotes.command;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 import com.cyprias.AdminNotes.ChatUtils;
 import com.cyprias.AdminNotes.Perm;
@@ -14,14 +17,14 @@ public class ReloadCommand implements Command {
 			list.add("/%s reload - Reload the plugin.");
 	}
 
-	public boolean execute(final CommandSender sender, org.bukkit.command.Command cmd, String[] args) {
+	public boolean execute(final CommandSender sender, org.bukkit.command.Command cmd, String[] args) throws FileNotFoundException, IOException, InvalidConfigurationException {
 		if (!Plugin.checkPermission(sender, Perm.RELOAD)) {
 			return false;
 		}
 
 		Plugin instance = Plugin.getInstance();
-		
-		instance.reloadConfig();
+
+		Plugin.reload();
 		instance.getPluginLoader().disablePlugin(instance);
 		instance.getPluginLoader().enablePlugin(instance);
 

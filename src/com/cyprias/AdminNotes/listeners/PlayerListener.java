@@ -82,16 +82,18 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) throws SQLException {
 		CommandSender sender = (CommandSender) event.getPlayer();
-		
-		/*if (!Plugin.hasPermission(sender, Perm.CREATE)) {
-			return;
-		}*/
-		
+
+		/*
+		 * if (!Plugin.hasPermission(sender, Perm.CREATE)) { return; }
+		 */
+
 		String msg = event.getMessage();
 
 		anCommand command;
-		String player, text, regex, location;
-		player = sender.getName();
+		String playerName, text, regex, location;
+		playerName = sender.getName();
+		Player p;
+
 		for (int i = 0; i < Plugin.anCommands.size(); i++) {
 			command = Plugin.anCommands.get(i);
 
@@ -101,25 +103,49 @@ public class PlayerListener implements Listener {
 				if (msg.matches(regex)) {
 					if (Config.getBoolean("properties.debug-messages"))
 						Logger.severe(msg + " matches " + regex);
-					
+
 					if (!Config.getBoolean("properties.auto-note-permission") || sender.hasPermission("adminnotes.autonote." + command.title)) {// ||
-						
-						try{
-							if (lastAutoNote.containsKey(sender)){
-								player =  lastAutoNote.get(sender).player;
-							}else
+
+						try {
+							if (lastAutoNote.containsKey(sender)) {
+								playerName = lastAutoNote.get(sender).player;
+							} else {
 								if (command.player != null)
-									player = msg.replaceFirst(regex, command.player);
-						
+									playerName = msg.replaceFirst(regex, command.player);
+
+								p = Plugin.getInstance().getServer().getPlayer(playerName);
+
+								if (p == null) {
+									String displayName = null;
+									for (Player oPlayer : Plugin.getInstance().getServer().getOnlinePlayers()) {
+										displayName = ChatColor.stripColor(oPlayer.getDisplayName());
+
+										if (displayName.substring(0, 1).equals("~"))
+											displayName = displayName.substring(1, displayName.length());
+
+										if (displayName.equalsIgnoreCase(playerName)) {
+											p = oPlayer;
+											break;
+										}
+									}
+
+									if (p != null) 
+										playerName = p.getName();
+									
+									
+
+								}
+
+							}
 						} catch (IndexOutOfBoundsException e) {
 							if (Config.getBoolean("properties.debug-messages"))
 								Logger.warning("Error getting player: " + e.getMessage());
 							continue;
 						}
 						if (Config.getBoolean("properties.confirm-player-joined"))
-							if (Plugin.hasPlayedBefore(player) == false){
+							if (Plugin.hasPlayedBefore(playerName) == false) {
 								if (Config.getBoolean("properties.debug-messages"))
-									Logger.warning("Player has never been on the server: " + player);
+									Logger.warning("Player has never been on the server: " + playerName);
 								continue;
 							}
 						if (lastAutoNote.containsKey(sender)) {
@@ -132,18 +158,16 @@ public class PlayerListener implements Listener {
 							text = text.replace("<location>", location);
 							text = text.replace("<commander>", sender.getName());
 						}
-						
-						
-						
-						if (r == (command.regex.length-1)) {
-							Plugin.database.create(sender, command.notify, player, text);
-							Logger.info("[AutoNote] " + sender.getName() + " on " + player + ": " + text);
+
+						if (r == (command.regex.length - 1)) {
+							Plugin.database.create(sender, command.notify, playerName, text);
+							Logger.info("[AutoNote] " + sender.getName() + " on " + playerName + ": " + text);
 
 							if (lastAutoNote.containsKey(sender))
 								lastAutoNote.remove(sender);
 						} else {
-							lastAutoNote.put(sender, new AutoNote(sender, msg, player, text, location));
-							
+							lastAutoNote.put(sender, new AutoNote(sender, msg, playerName, text, location));
+
 							if (Config.getBoolean("properties.debug-messages"))
 								Logger.info("Saving autonote for later: " + text);
 						}

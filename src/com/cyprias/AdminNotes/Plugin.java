@@ -108,7 +108,7 @@ public class Plugin extends JavaPlugin {
 		getServer().getScheduler().runTaskAsynchronously(instance, new Runnable() {
 			public void run() {
 				try {
-					VersionChecker version = new VersionChecker("http://dev.bukkit.org/server-mods/adminnotes/files.rss");
+					VersionChecker version = new VersionChecker("http://dev.bukkit.org/server-mods/chunkspawnerlimiter/files.rss");
 					VersionChecker.versionInfo info = (version.versions.size() > 0) ? version.versions.get(0) : null;
 					if (info != null) {
 						String curVersion = getDescription().getVersion();
@@ -128,7 +128,7 @@ public class Plugin extends JavaPlugin {
 	}
 	
 	//anPermissions
-	private void autoNotePermission(String title){
+	private static void autoNotePermission(String title){
 		Permission perm = new Permission("adminnotes.autonote."+title, PermissionDefault.getByName(Config.getString("properties.permission-default")));// PermissionDefault.getByName(Config.getString("properties.auto-note-permission"))
 		perm.addParent(Perm.AUTO_NOTE.getPermission(), true);
 		Bukkit.getPluginManager().addPermission(perm);
@@ -137,7 +137,7 @@ public class Plugin extends JavaPlugin {
 	
 	public static List<anCommand> anCommands = new ArrayList<anCommand>();
 	
-	public class anCommand {
+	public static class anCommand {
 		public String[]  regex;
 		public String player;
 		public String note;
@@ -158,7 +158,7 @@ public class Plugin extends JavaPlugin {
 		}
 	}
 	
-	private void loadAutoNotes() throws FileNotFoundException, IOException, InvalidConfigurationException{
+	private static void loadAutoNotes() throws FileNotFoundException, IOException, InvalidConfigurationException{
 		anCommands.clear();
 		
 		YML loadAutoNotes = new YML(instance.getResource("auto-notes.yml"),instance.getDataFolder(), "auto-notes.yml");
@@ -194,10 +194,14 @@ public class Plugin extends JavaPlugin {
 		}
 	}
 
-	public void onDisable() {
+	public static void removeANPermissions(){
 		for (int i=0;i<anCommands.size();i++){
 			Bukkit.getPluginManager().removePermission("adminnotes.autonote."+anCommands.get(i).title);
 		}
+	}
+	
+	public void onDisable() {
+		removeANPermissions();
 		
 		PluginManager pm = Bukkit.getPluginManager();
 		for (Perm permission : Perm.values()) {
@@ -217,8 +221,10 @@ public class Plugin extends JavaPlugin {
 		Logger.info("disabled.");
 	}
 
-	public static void reload() {
+	public static void reload() throws FileNotFoundException, IOException, InvalidConfigurationException {
+		removeANPermissions();
 		instance.reloadConfig();
+		loadAutoNotes();
 	}
 
 	public static void disable() {

@@ -1,10 +1,14 @@
 package com.cyprias.AdminNotes.command;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 public interface Command extends Listable {
 
-	boolean execute(CommandSender sender, org.bukkit.command.Command cmd, String[] args);
+	boolean execute(CommandSender sender, org.bukkit.command.Command cmd, String[] args) throws FileNotFoundException, IOException, InvalidConfigurationException;
 
 	CommandAccess getAccess();
 
