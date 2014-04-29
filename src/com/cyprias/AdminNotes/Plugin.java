@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -82,8 +80,6 @@ public class Plugin extends JavaPlugin {
 			} catch (IOException e) {
 			}
 
-		if (Config.getBoolean("properties.check-new-version"))
-			checkVersion();
 
 		try {
 			loadAutoNotes();
@@ -102,30 +98,6 @@ public class Plugin extends JavaPlugin {
 		}
 	}
 
-
-	private void checkVersion() {
-		// Run our version checker in async thread, so not to lockup if timeout.
-		getServer().getScheduler().runTaskAsynchronously(instance, new Runnable() {
-			public void run() {
-				try {
-					VersionChecker version = new VersionChecker("http://dev.bukkit.org/server-mods/chunkspawnerlimiter/files.rss");
-					VersionChecker.versionInfo info = (version.versions.size() > 0) ? version.versions.get(0) : null;
-					if (info != null) {
-						String curVersion = getDescription().getVersion();
-						if (VersionChecker.compareVersions(curVersion, info.getTitle()) < 0) {
-							Logger.warning("We're running v" + curVersion + ", v" + info.getTitle() + " is available");
-							Logger.warning(info.getLink());
-						}
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (ParserConfigurationException e) {
-					e.printStackTrace();
-				}
-
-			}
-		});
-	}
 	
 	//anPermissions
 	private static void autoNotePermission(String title){
