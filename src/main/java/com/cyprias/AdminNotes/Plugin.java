@@ -16,7 +16,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mcstats.Metrics;
+//import org.mcstats.Metrics;
 import com.cyprias.AdminNotes.command.AppendCommand;
 import com.cyprias.AdminNotes.command.CommandManager;
 import com.cyprias.AdminNotes.command.CreateCommand;
@@ -73,12 +73,12 @@ public class Plugin extends JavaPlugin {
 
 		this.getCommand("notes").setExecutor(cm);
 
-		if (Config.getBoolean("properties.use-metrics"))
-			try {
-				Metrics metrics = new Metrics(this);
-				metrics.start();
-			} catch (IOException e) {
-			}
+		//if (Config.getBoolean("properties.use-metrics"))
+		//	try {
+		//		Metrics metrics = new Metrics(this);
+		//		metrics.start();
+		//	} catch (IOException e) {
+		//	}
 
 
 		try {

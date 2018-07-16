@@ -141,7 +141,7 @@ public class PlayerListener implements Listener {
 							continue;
 						}
 						if (Config.getBoolean("properties.confirm-player-joined"))
-							if (Plugin.hasPlayedBefore(playerName) == false) {
+							if (!Plugin.hasPlayedBefore(playerName)) {
 								if (Config.getBoolean("properties.debug-messages"))
 									Logger.warning("Player has never been on the server: " + playerName);
 								continue;

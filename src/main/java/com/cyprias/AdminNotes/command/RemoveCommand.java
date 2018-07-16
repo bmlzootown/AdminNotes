@@ -42,7 +42,7 @@ public class RemoveCommand implements Command {
 	
 	@Override
 	public boolean execute(final CommandSender sender, org.bukkit.command.Command cmd, String[] args) {
-		if (!Plugin.checkPermission(sender, Perm.INFO)) 
+		if (!Plugin.checkPermission(sender, Perm.REMOVE))
 			return false;
 		
 		if (args.length == 0){
