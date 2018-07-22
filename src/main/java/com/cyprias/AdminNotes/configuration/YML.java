@@ -14,7 +14,12 @@ public class YML extends YamlConfiguration {
 	private static File file = null;
 	public YML(InputStream fileStream) throws IOException, InvalidConfigurationException {
 		//load yml from resources.
-		load(fileStream);
+		File tempFile = File.createTempFile("ymlbeingloaded", null);
+		tempFile.deleteOnExit();
+		FileOutputStream out = new FileOutputStream(tempFile);
+		copyStream (fileStream, out);
+
+		load(tempFile);
 	}
 	
 	public YML(File pluginDur, String fileName) throws FileNotFoundException, IOException, InvalidConfigurationException {
@@ -55,6 +60,14 @@ public class YML extends YamlConfiguration {
 	
 	public void save() throws IOException{
 		save(file);
+	}
+
+	public static void copyStream(InputStream in, OutputStream out) throws IOException {
+		byte[] buffer = new byte[1024];
+		int read;
+		while ((read = in.read(buffer)) != -1) {
+			out.write(buffer, 0, read);
+		}
 	}
 	
 }

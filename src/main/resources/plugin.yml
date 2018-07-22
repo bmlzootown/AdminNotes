@@ -3,6 +3,7 @@ main: com.cyprias.AdminNotes.Plugin
 author: Cyprias, bmlzootown
 description: An Admin notes plugin.
 version: 0.12.4
+api-version: 1.13
 
 commands:
   notes:

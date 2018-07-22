@@ -186,7 +186,8 @@ public class Plugin extends JavaPlugin {
 		this.getCommand("notes").setExecutor(null);
 		
 		
-		instance.getServer().getScheduler().cancelAllTasks();
+		//instance.getServer().getScheduler().cancelAllTasks();
+		instance.getServer().getScheduler().cancelTasks(instance);
 		
 		PlayerListener.unregisterEvents(instance);
 
