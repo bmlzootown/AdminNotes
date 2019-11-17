@@ -2,8 +2,8 @@ name: AdminNotes
 main: com.cyprias.AdminNotes.Plugin
 author: Cyprias, bmlzootown
 description: An Admin notes plugin.
-version: 0.12.4
-api-version: 1.13
+version: 0.12.5
+api-version: 1.14
 
 commands:
   notes:
